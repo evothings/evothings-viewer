@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<script src="js/hyper-os.js"></script>
+	<script src="js/hyper-viewport.js"></script>
+
+	<title>Evothings Studio</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/fastclick.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!-- tabindex and onclick enables :focus selector in some browsers. -->
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem id="info_button">Info</menuitem>
+			<!--<menuitem onclick="location.href='gallery.html'">
+				App Gallery
+			</menuitem>-->
+		</menu>
+	</header>
+
+	<main>
+
+		<h1>Evothings Studio</h1>
+
+		<p>Welcome to the Evothings Studio app! Begin by connecting to Evothings Workbench.</p>
+
+		<p>Enter the Connect Key you got in the Workbench:</p>
+		<input id="hyper-key" type="url" style="width:80%;" />
+		<br/>
+		<button id="hyper-button-connect" onclick="app.connect()" class="stone">
+			CONNECT TO WORKBENCH
+		</button>
+
+	</main>
+
+	<article id="info">
+
+		<h1>Info</h1>
+
+		<p>This is an Alpha release of the companion app for Evothings Studio 2.0.</p>
+
+		<p>Use this app with the Evothings Studio 2.0 Workbench desktop application to develop mobile apps for IoT in HTML5/JavaScript. The desktop application is available at <a href="javascript:app.openBrowser('http://evothings.com')">evothings.com</a>.</p>
+
+		<h1>How to use</h1>
+
+		<p>Launch the Evothings Workbench desktop application. Follow on screen instructions to get a connect key.</p>
+
+		<p>Enter the connect key into this app and tap the Connect button.</p>
+
+		<p>Click the <b>Run</b> button of a project in the Workbench to launch an app on this device.</p>
+
+		<h1>Learn more</h1>
+
+		<p>For more information and tutorials, visit
+		<a href="javascript:app.openBrowser('http://evothings.com')">evothings.com</a> (note that tutorials are not yet updated for Evothings Studio 2.0, but all tutorial examples and JavaScript libraries are fully compatible with this app).</p>
+
+		<h1>Contact</h1>
+
+		<p>Email: <a href="mailto:info@evothings.com">info@evothings.com</a></p>
+
+		<p>App Version: __APP_VERSION__</p>
+
+		<p><small>Copyright &copy; 2013-2015 Evothings AB</small></p>
+
+	</article>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="js/app.js"></script>
+
+</body>
+</html>
