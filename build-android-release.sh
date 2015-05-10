@@ -9,6 +9,6 @@
 #
 echo "Building Android release APK"
 cordova build android --release
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../keys/evothings.keystore platforms/android/ant-build/Evothings-release-unsigned.apk evothings_alias
-jarsigner -verify -verbose platforms/android/ant-build/Evothings-release-unsigned.apk
-zipalign -v 4 platforms/android/ant-build/Evothings-release-unsigned.apk platforms/android/ant-build/EvothingsApp.apk
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../keys/evothings.keystore platforms/android/ant-build/MainActivity-release-unsigned.apk evothings_alias
+jarsigner -verify -verbose platforms/android/ant-build/MainActivity-release-unsigned.apk
+zipalign -v 4 platforms/android/ant-build/MainActivity-release-unsigned.apk platforms/android/ant-build/EvothingsApp.apk

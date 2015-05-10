@@ -262,7 +262,7 @@ end
 
 # Read version number from config.xml
 def readVersionNumber
-	config = fileRead("./www/config.xml")
+	config = fileRead("./config.xml")
 
 	# Get version number from config.xml.
 	match = config.scan(/version="(.*?)"/)
@@ -275,7 +275,7 @@ end
 
 # Read the Android version code from config.xml
 def readAndroidVersionCode
-	config = fileRead("./www/config.xml")
+	config = fileRead("./config.xml")
 
 	# Get version code from config.xml.
 	match = config.scan(/android-versionCode="(.*?)"/)
@@ -389,7 +389,7 @@ def copyIconsAndPlatformFiles
 	# https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/App-RelatedResources/App-RelatedResources.html#//apple_ref/doc/uid/TP40007072-CH6-SW1
 	if(@platform == "ios")
 		srcPath = "config/icons/"
-		destPath = "platforms/ios/EvoThings/Resources/icons/"
+		destPath = "platforms/ios/EvothingsApp/Resources/icons/"
 
 		# Delete old icons.
 		rm_rf(Dir.glob(destPath + "*"))
@@ -418,31 +418,31 @@ def copyIconsAndPlatformFiles
 	# Copy iOS splash screens.
 	if(@platform == "ios")
 		srcPath = "config/icons/ios_splash"
-		destPath = "platforms/ios/EvoThings/Resources/splash"
+		destPath = "platforms/ios/EvothingsApp/Resources/splash"
 		copy_entry(srcPath, destPath)
 	end
 
 	# Copy native Android source files.
 	if(@platform == "android")
 		# Copy customised Activity class.
-		cp("config/native/android/src/com/evothings/evothingsstudioapp/Evothings.java",
-			"platforms/android/src/com/evothings/evothingsstudioapp/Evothings.java")
+		cp("config/native/android/src/com/evothings/evothingsstudioapp/MainActivity.java",
+			"platforms/android/src/com/evothings/evothingsstudioapp/MainActivity.java")
 	end
 
 	# Copy native iOS source files.
 	if(@platform == "ios")
 		# Copy custom main file.
 		cp("config/native/ios/main.m",
-			"platforms/ios/EvoThings/main.m")
+			"platforms/ios/EvothingsApp/main.m")
 
 		# Copy customised AppDelegate class.
 		cp("config/native/ios/AppDelegate.m",
-			"platforms/ios/EvoThings/Classes/AppDelegate.m")
+			"platforms/ios/EvothingsApp/Classes/AppDelegate.m")
 
 		# Insert version number into customised Info-plist.
 		fileSave(
-			"platforms/ios/EvoThings/EvoThings-Info.plist",
-			fileRead("config/native/ios/EvoThings-Info.plist").gsub(
+			"platforms/ios/EvothingsApp/EvothingsApp-Info.plist",
+			fileRead("config/native/ios/EvothingsApp-Info.plist").gsub(
 				"EVOTHINGS_STUDIO_APP_VERSION_NUMBER",
 				readVersionNumber()))
 	end
@@ -455,6 +455,12 @@ def copyStylesheetAndJQuery
 		mkdir_p("www/libs/evothings/")
 		cp("../evothings-examples/resources/libs/evothings/evothings.js",
 			"www/libs/evothings/evothings.js")
+		cp_r(Dir["../evothings-examples/resources/libs/evothings/ui"],
+			"www/libs/evothings/")
+		#cp("../evothings-examples/resources/libs/evothings/ui/ui.js",
+		#	"www/libs/evothings/ui/ui.js")
+		#cp("../evothings-examples/resources/libs/evothings/ui/fastclick.js",
+		#	"www/libs/evothings/ui/fastclick.js")
 	else
 		raise "Couldn't find ../evothings-examples/resources."
 	end
@@ -531,7 +537,7 @@ def build
 
 	# Install debug build if switch "i" is given.
 	if(@install && @platform == "android")
-		sh "adb install -r platforms/android/ant-build/Evothings-debug.apk"
+		sh "adb install -r platforms/android/ant-build/MainActivity-debug.apk"
 	end
 end
 

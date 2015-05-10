@@ -11,10 +11,19 @@ var SERVER_ADDRESS = 'http://evothings.com:8080'
 
 app.initialize = function()
 {
+	document.addEventListener('deviceready', app.onDeviceReady, false)
+
+	// Page navigation.
+	$('#info_button').bind('click', {articleId: 'info'}, app.showArticle)
+
 	$(function()
 	{
-		FastClick.attach(document.body)
+		//FastClick.attach(document.body)
 	})
+}
+
+app.onDeviceReady = function()
+{
 }
 
 app.connect = function()
@@ -23,7 +32,7 @@ app.connect = function()
 	var key = document.getElementById("hyper-key").value
 
 	// Set URL.
-	var url
+	var url = ''
 	if (0 == key.indexOf('http://'))
 	{
 		// This looks like a URL, launch it.
@@ -39,9 +48,6 @@ app.connect = function()
 	window.location.assign(url)
 }
 
-// App main entry point.
-app.initialize()
-
 app.openBrowser = function(url)
 {
 	window.open(url, '_system', 'location=yes')
@@ -55,7 +61,7 @@ app.showArticle = function(event)
 	articlePage.toggle()
 
 	if (articlePage.is(":visible"))
-		$(this).text('Scan for Workbench')
+		$(this).text('Connect')
 	else
 		$(this).text('Info')
 }
