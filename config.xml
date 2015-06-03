@@ -4,7 +4,7 @@
 	android-versionCode="1"
 	xmlns="http://www.w3.org/ns/widgets"
 	xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>EvothingsApp</name>
+    <name>Evothings</name>
     <description>
         Mobile app for Evothings Studio.
     </description>
@@ -13,6 +13,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -23,4 +24,73 @@
 	<preference name="EnableViewportScale" value="true" />
 	<preference name="AndroidLaunchMode" value="singleTask" />
 	<preference name="BackupWebStorage" value="local" />
+
+	<hook type="before_build" src="scripts/before_build.js" />
+
+	<platform name="android">
+		<icon src="config/icons/icon-36.png" density="ldpi" />
+		<icon src="config/icons/icon-48.png" density="mdpi" />
+		<icon src="config/icons/icon-72.png" density="hdpi" />
+		<icon src="config/icons/icon-96.png" density="xhdpi" />
+	</platform>
+
+	<platform name="ios">
+		<!-- iOS 8.0+ -->
+		<!-- iPhone 6 Plus  -->
+		<icon src="config/icons/icon-white-180.png" width="180" height="180" />
+		<!-- iOS 7.0+ -->
+		<!-- iPhone / iPod Touch  -->
+		<icon src="config/icons/icon-white-60.png" width="60" height="60" />
+		<icon src="config/icons/icon-white-120.png" width="120" height="120" />
+		<!-- iPad -->
+		<icon src="config/icons/icon-white-76.png" width="76" height="76" />
+		<icon src="config/icons/icon-white-152.png" width="152" height="152" />
+		<!-- iOS 6.1 -->
+		<!-- Spotlight Icon -->
+		<icon src="config/icons/icon-white-40.png" width="40" height="40" />
+		<icon src="config/icons/icon-white-80.png" width="80" height="80" />
+		<!-- iPhone / iPod Touch -->
+		<icon src="config/icons/icon-white-57.png" width="57" height="57" />
+		<icon src="config/icons/icon-white-114.png" width="114" height="114" />
+		<!-- iPad -->
+		<icon src="config/icons/icon-white-72.png" width="72" height="72" />
+		<icon src="config/icons/icon-white-144.png" width="144" height="144" />
+		<!-- iPhone Spotlight and Settings Icon -->
+		<icon src="config/icons/icon-white-29.png" width="29" height="29" />
+		<icon src="config/icons/icon-white-58.png" width="58" height="58" />
+		<!-- iPad Spotlight and Settings Icon -->
+		<icon src="config/icons/icon-white-50.png" width="50" height="50" />
+		<icon src="config/icons/icon-white-100.png" width="100" height="100" />
+	</platform>
+
+	<platform name="android">
+		<!-- you can use any density that exists in the Android project -->
+		<!--
+		<splash src="res/screen/android/splash-land-hdpi.png" density="land-hdpi"/>
+		<splash src="res/screen/android/splash-land-ldpi.png" density="land-ldpi"/>
+		<splash src="res/screen/android/splash-land-mdpi.png" density="land-mdpi"/>
+		<splash src="res/screen/android/splash-land-xhdpi.png" density="land-xhdpi"/>
+		<splash src="res/screen/android/splash-port-hdpi.png" density="port-hdpi"/>
+		<splash src="res/screen/android/splash-port-ldpi.png" density="port-ldpi"/>
+		<splash src="res/screen/android/splash-port-mdpi.png" density="port-mdpi"/>
+		<splash src="res/screen/android/splash-port-xhdpi.png" density="port-xhdpi"/>
+		-->
+	</platform>
+
+	<platform name="ios">
+		<!-- images are determined by width and height. The following are supported -->
+		<splash src="config/icons/ios_splash/Default~iphone.png" width="320" height="480"/>
+		<splash src="config/icons/ios_splash/Default@2x~iphone.png" width="640" height="960"/>
+		<splash src="config/icons/ios_splash/Default-Portrait~ipad.png" width="768" height="1024"/>
+		<splash src="config/icons/ios_splash/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
+		<splash src="config/icons/ios_splash/Default-Landscape~ipad.png" width="1024" height="768"/>
+		<splash src="config/icons/ios_splash/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>
+		<splash src="config/icons/ios_splash/Default-568h@2x~iphone.png" width="640" height="1136"/>
+		<!--
+		<splash src="config/icons/ios_splash/Default-667h.png" width="750" height="1334"/>
+		<splash src="config/icons/ios_splash/Default-736h.png" width="1242" height="2208"/>
+		<splash src="config/icons/ios_splash/Default-Landscape-736h.png" width="2208" height="1242"/>
+		-->
+	</platform>
+
 </widget>
