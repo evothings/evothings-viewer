@@ -1,6 +1,39 @@
 {
-  "plugins": [
-    "cordova-plugin-console",
-    "cordova-plugin-device"
-  ]
+	"doc": [
+		"It is possible to specify a field location in the plugin list to specify a URL or path. The location will be used instead of id when adding the plugin. Examples:",
+		{ "id": "com.evothings.ble",
+		  "location": "https://github.com/evothings/cordova-ble" },
+		{ "id": "com.evothings.ble",
+		  "location": "../cordova-ble" }
+	],
+	"platforms": [
+		"ios",
+		"android"
+	],
+	"plugins": [
+		{ "id": "cordova-plugin-legacy-whitelist" },
+		{ "id": "cordova-plugin-battery-status" },
+		{ "id": "cordova-plugin-camera" },
+		{ "id": "cordova-plugin-console" },
+		{ "id": "cordova-plugin-device" },
+		{ "id": "cordova-plugin-device-motion" },
+		{ "id": "cordova-plugin-device-orientation" },
+		{ "id": "cordova-plugin-dialogs" },
+		{ "id": "cordova-plugin-geolocation" },
+		{ "id": "cordova-plugin-globalization" },
+		{ "id": "cordova-plugin-inappbrowser" },
+		{ "id": "cordova-plugin-network-information" },
+		{ "id": "cordova-plugin-chrome-apps-common" },
+		{ "id": "cordova-plugin-chrome-apps-system-network" },
+		{ "id": "cordova-plugin-chrome-apps-iossocketscommon" },
+		{ "id": "cordova-plugin-chrome-apps-socket" },
+		{ "id": "cordova-plugin-chrome-apps-sockets-tcp" },
+		{ "id": "cordova-plugin-chrome-apps-sockets-tcpserver" },
+		{ "id": "cordova-plugin-chrome-apps-sockets-udp" },
+		{ "id": "com.unarin.cordova.beacon" },
+		{ "id": "pl.makingwaves.estimotebeacons" },
+		{ "id": "de.appplant.cordova.plugin.local-notification" },
+		{ "id": "com.megster.cordova.bluetoothserial" },
+		{ "id": "com.evothings.ble" }
+	]
 }

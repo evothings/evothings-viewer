@@ -7,7 +7,8 @@ if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error =
 var app = {}
 
 // Constants.
-var SERVER_ADDRESS = 'http://evothings.com:8080'
+//var SERVER_ADDRESS = 'http://evothings.com:8081'
+var SERVER_ADDRESS = 'http://192.168.43.131:8081'
 
 app.initialize = function()
 {
@@ -41,7 +42,7 @@ app.connect = function()
 	else
 	{
 		// Create server URL.
-		url = SERVER_ADDRESS + '/hyper/' + key + '/'
+		url = SERVER_ADDRESS + '/hyper/' + key + '/connect/'
 	}
 
 	// Open URL.

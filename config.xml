@@ -1,9 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.evothings.evothingsstudioapp"
 	version="1.0.0"
+	ios-CFBundleVersion="1.0.0"
 	android-versionCode="1"
 	xmlns="http://www.w3.org/ns/widgets"
 	xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
     <name>Evothings</name>
     <description>
         Mobile app for Evothings Studio.
@@ -14,10 +16,9 @@
     <content src="index.html" />
     <access origin="*" />
 
-    <preference name="fullscreen" value="true" />
-    <preference name="webviewbounce" value="false" />
+    <preference name="Fullscreen" value="true" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="orientation" value="default" />
+    <preference name="Orientation" value="default" />
     <preference name="BackgroundColor" value="0xffffffff"/>
 	<preference name="HideKeyboardFormAccessoryBar" value="true" />
 	<preference name="FadeSplashScreen" value="false" />
@@ -26,6 +27,14 @@
 	<preference name="BackupWebStorage" value="local" />
 
 	<hook type="before_build" src="scripts/before_build.js" />
+
+	<platform name="android">
+		<hook type="after_build" src="scripts/after_build_android.js" />
+	</platform>
+
+	<platform name="ios">
+		<hook type="after_build" src="scripts/after_build_ios.js" />
+	</platform>
 
 	<platform name="android">
 		<icon src="config/icons/icon-36.png" density="ldpi" />
