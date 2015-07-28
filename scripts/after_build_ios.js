@@ -13,9 +13,11 @@ function main()
 	UTIL.copyFileUTF8(
 		'./config/native/ios/main.m',
 		'./platforms/ios/Evothings/main.m')
-	UTIL.copyFileUTF8(
-		'./config/native/ios/Evothings-Info.plist',
-		'./platforms/ios/Evothings/Evothings-Info.plist')
+	// TODO: Remove commented out code.
+	// Settings are now made in a config plugin.
+	//UTIL.copyFileUTF8(
+	//	'./config/native/ios/Evothings-Info.plist',
+	//	'./platforms/ios/Evothings/Evothings-Info.plist')
 }
 
 main()

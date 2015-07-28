@@ -11,8 +11,6 @@ function main()
 	UTIL.copyFileUTF8(
 		'./config/native/android/src/com/evothings/evothingsstudioapp/MainActivity.java',
 		'./platforms/android/src/com/evothings/evothingsstudioapp/MainActivity.java')
-
-	// TODO: Copy or update AndroidManifest.xml
 }
 
 main()
