@@ -144,11 +144,11 @@ public class MainActivity extends CordovaActivity
 	}
 
 	public class EvothingsWebViewEngine extends SystemWebViewEngine {
-		private Evothings mEvothings;
+		private MainActivity mActivity;
 
-		public EvothingsWebViewEngine(Evothings evothings, CordovaPreferences preferences) {
-			super(evothings, preferences);
-			mEvothings = evothings;
+		public EvothingsWebViewEngine(MainActivity activity, CordovaPreferences preferences) {
+			super(activity, preferences);
+			mActivity = activity;
 		}
 
 		@Override
@@ -156,7 +156,7 @@ public class MainActivity extends CordovaActivity
 			CordovaResourceApi resourceApi, PluginManager pluginManager,
 			NativeToJsMessageQueue nativeToJsMessageQueue)
 		{
-			webView.setWebViewClient(new EvothingsWebViewClient(mEvothings, this));
+			webView.setWebViewClient(new EvothingsWebViewClient(mActivity, this));
 			super.init(parentWebView, cordova, client, resourceApi, pluginManager, nativeToJsMessageQueue);
 		}
 	}
@@ -168,15 +168,15 @@ public class MainActivity extends CordovaActivity
 		// "evocache:" URLs that don't match this name will not be allowed to load.
 		private String mCachedApp;
 
-		private Evothings mEvothings;
+		private MainActivity mActivity;
 
 		// Contains the URL of the currently loaded page, or null if no page has yet loaded.
 		private String mLoadedPage;
 
-		public EvothingsWebViewClient(Evothings evothings, SystemWebViewEngine parentEngine)
+		public EvothingsWebViewClient(MainActivity activity, SystemWebViewEngine parentEngine)
 		{
 			super(parentEngine);
-			mEvothings = evothings;
+			mActivity = activity;
 		}
 
 		@Override
@@ -267,7 +267,7 @@ public class MainActivity extends CordovaActivity
 		public boolean shouldOverrideUrlLoading(WebView view, String url)
 		{
 			LOG.i("EvothingsWebViewClient", "shouldOverrideUrlLoading "+url);
-			String cacheRoot = mEvothings.getDir("evocache", MODE_PRIVATE).toURI().toString();
+			String cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE).toURI().toString();
 			mCachedApp = null;
 			// Used by external apps to load things into Evothings Client.
 			if (url.startsWith("evothings:"))
@@ -424,7 +424,7 @@ public class MainActivity extends CordovaActivity
 			// Load the app list.
 			JSONObject appList;
 			JSONObject list = null;
-			File cacheRoot = mEvothings.getDir("evocache", MODE_PRIVATE);
+			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
 			if(appListFile.exists()) {
 				appList = new JSONObject(utf8StreamToString(new FileInputStream(appListFile)));
@@ -496,7 +496,7 @@ public class MainActivity extends CordovaActivity
 			// Load the app list.
 			JSONObject appList;
 			JSONObject list = null;
-			File cacheRoot = mEvothings.getDir("evocache", MODE_PRIVATE);
+			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
 			if(appListFile.exists()) {
 				appList = new JSONObject(utf8StreamToString(new FileInputStream(appListFile)));
@@ -552,7 +552,7 @@ public class MainActivity extends CordovaActivity
 		byte[] generateClientsAppListJson() throws Exception {
 			// Load the app list.
 			JSONObject nativeList = null;
-			File cacheRoot = mEvothings.getDir("evocache", MODE_PRIVATE);
+			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
 			if(appListFile.exists()) {
 				String s = utf8StreamToString(new FileInputStream(appListFile));

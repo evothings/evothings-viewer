@@ -70,6 +70,52 @@ function cleanUp()
 	deleteFolder('./plugins')
 }
 
+function getAppVersion(cordovaContext)
+{
+	// Get version from config.xml.
+	var ET = cordovaContext.requireCordovaModule('elementtree')
+	var config = readFileUTF8('./config.xml')
+	var tree = ET.parse(config)
+	return tree.getroot().attrib.version
+}
+
+function getPluginVersions(cordovaContext)
+{
+	// Get plugin versions from plugin.xml files.
+	var ET = cordovaContext.requireCordovaModule('elementtree')
+	return getInstalledPlugins().map(function(pluginId) {
+		var path = 'plugins/' + pluginId + '/plugin.xml'
+		var plugin = readFileUTF8(path)
+		var tree = ET.parse(plugin)
+		var version = tree.getroot().attrib.version
+		return { 'id': pluginId, 'version':version }
+	})
+}
+
+function getInstalledPlugins()
+{
+	var plugins = require('../plugins/fetch.json')
+	return Object.keys(plugins)
+}
+
+// This function inserts version info into index.html.
+function insertVersionInfo(cordovaContext, pathToIndexHtml)
+{
+	if (!fileExists(pathToIndexHtml)) { return }
+
+	// Create HTML with plugin versions.
+	var pluginVersions = getPluginVersions(cordovaContext)
+	var mapper = function(element) {
+		return element.id + ' ' + element.version }
+	var pluginVersionsHtml = pluginVersions.map(mapper).join('<br/>\n')
+
+	// Insert version info into index.html.
+	var data = readFileUTF8(pathToIndexHtml)
+	data = data.replace(new RegExp('__APP_VERSION__', 'g'), getAppVersion(cordovaContext))
+	data = data.replace(new RegExp('__PLUGIN_VERSIONS__', 'g'), pluginVersionsHtml)
+	writeFileUTF8(pathToIndexHtml, data)
+}
+
 exports.execute = execute
 exports.deleteFolder = deleteFolder
 exports.fileExists = fileExists
@@ -77,3 +123,7 @@ exports.readFileUTF8 = readFileUTF8
 exports.writeFileUTF8 = writeFileUTF8
 exports.copyFileUTF8 = copyFileUTF8
 exports.cleanUp = cleanUp
+exports.getAppVersion = getAppVersion
+exports.getPluginVersions = getPluginVersions
+exports.getInstalledPlugins = getInstalledPlugins
+exports.insertVersionInfo = insertVersionInfo

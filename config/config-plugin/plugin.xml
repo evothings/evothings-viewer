@@ -2,7 +2,7 @@
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	id="com.evothings.evothings-studio-app.config-plugin"
-	version="0.1.0">
+	version="1.0.0">
 
 	<name>Evothings Studio App Config Plugin</name>
 	<description>Plugin that adds platform config settings to Evothings Studio App.</description>

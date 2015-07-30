@@ -30,11 +30,11 @@
 	<hook type="before_build" src="scripts/before_build.js" />
 
 	<platform name="android">
-		<hook type="after_build" src="scripts/after_build_android.js" />
+		<hook type="after_prepare" src="scripts/after_prepare_android.js" />
 	</platform>
 
 	<platform name="ios">
-		<hook type="after_build" src="scripts/after_build_ios.js" />
+		<hook type="after_prepare" src="scripts/after_prepare_ios.js" />
 	</platform>
 
 	<platform name="android">
