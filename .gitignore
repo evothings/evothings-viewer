@@ -1,9 +1,3 @@
 .DS_Store
 platforms
 plugins
-/localConfig.rb
-/www/index.html
-/www/ui
-/www/libs/jquery
-/www/libs/evothings/
-/gen-doc
