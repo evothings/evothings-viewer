@@ -7,10 +7,10 @@ if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error =
 var app = {}
 
 // Production server address.
-//var SERVER_ADDRESS = 'http://evothings.com:8081'
+var SERVER_ADDRESS = 'http://evothings.com:8081'
 
 // Use your machine's IP address for testing.
-var SERVER_ADDRESS = 'http://192.168.43.247:8081' // Micke's test address
+//var SERVER_ADDRESS = 'http://192.168.43.247:8081' // Micke's test address
 
 app.initialize = function()
 {
