@@ -1,4 +1,4 @@
-## Evothings Studio App
+## Evothings Viewer
 
 ### Introduction
 
@@ -12,29 +12,27 @@ To build the app, you need Apache Cordova installed. Here are the build steps:
 
 Clone this repository:
 
-    git clone git@github.com:evothings/evothings-studio-app.git
+    git clone git@github.com:evothings/evothings-viewer.git
 
 Go to the repository directory:
 
-    cd evothings-studio-app
+    cd evothings-viewer
 
 Add your platforms:
 
     cordova add android
     cordova add ios
 
-An alternative method to add platforms is to run the init.js script, which will add the platforms listed in package.json:
-
-    node scripts/init.js
-
 Then build using Cordova, this will add plugins first time you build either of:
 
     cordova build android
     cordova build ios
 
-You can edit package.json to configure which plugins you wish to be included and the platforms added by init.js.
+You can edit package.json to configure which plugins you wish to be included.
 
-To clean up the project, run init.js.
+To clean up the project run (removes platforms and plugins):
+
+    node scripts/clean.js
 
 ### Build system overview
 
@@ -50,9 +48,9 @@ Source code files in the config folder are copied to the target platform directo
 
 To clean the project use the command:
 
-    node scripts/init.js
+    node scripts/clean.js
 
-This removes projects and plugins, and adds Android and iOS platforms. Plugins are added when the project is then built for the first time.
+This removes projects and plugins. Add platforms using "cordova platform add ...". Plugins are added when the project is built for the first time.
 
 ### Known Cordova build bugs
 

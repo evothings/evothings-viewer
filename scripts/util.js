@@ -83,7 +83,12 @@ function getPluginVersions(cordovaContext)
 {
 	// Get plugin versions from plugin.xml files.
 	var ET = cordovaContext.requireCordovaModule('elementtree')
-	return getInstalledPlugins().map(function(pluginId) {
+	var installedPlugins = getInstalledPlugins()
+	if (!installedPlugins)
+	{
+		return null
+	}
+	return installedPlugins.map(function(pluginId) {
 		var path = 'plugins/' + pluginId + '/plugin.xml'
 		var plugin = readFileUTF8(path)
 		var tree = ET.parse(plugin)
@@ -94,8 +99,15 @@ function getPluginVersions(cordovaContext)
 
 function getInstalledPlugins()
 {
-	var plugins = require('../plugins/fetch.json')
-	return Object.keys(plugins)
+	try
+	{
+		var plugins = require('../plugins/fetch.json')
+		return Object.keys(plugins)
+	}
+	catch (error)
+	{
+		return null
+	}
 }
 
 // This function inserts version info into index.html.
@@ -105,6 +117,8 @@ function insertVersionInfo(cordovaContext, pathToIndexHtml)
 
 	// Create HTML with plugin versions.
 	var pluginVersions = getPluginVersions(cordovaContext)
+	if (!pluginVersions) { return }
+
 	var mapper = function(element) {
 		return element.id + ' ' + element.version }
 	var pluginVersionsHtml = pluginVersions.map(mapper).join('<br/>\n')

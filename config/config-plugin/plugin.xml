@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	id="com.evothings.evothings-studio-app.config-plugin"
+	id="com.evothings.evothingsviewer.config-plugin"
 	version="1.0.0">
 
-	<name>Evothings Studio App Config Plugin</name>
-	<description>Plugin that adds platform config settings to Evothings Studio App.</description>
+	<name>Evothings Viewer Config Plugin</name>
+	<description>Plugin that adds platform config settings to Evothings Viewer app.</description>
 	<license>MIT</license>
 	<keywords>Evothings, Internet of Things, IoT, JavaScript</keywords>
 

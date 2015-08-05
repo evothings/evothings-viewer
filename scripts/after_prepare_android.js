@@ -11,6 +11,6 @@ module.exports = function(context)
 
 	// Copy files.
 	UTIL.copyFileUTF8(
-		'./config/native/android/src/com/evothings/evothingsstudioapp/MainActivity.java',
-		'./platforms/android/src/com/evothings/evothingsstudioapp/MainActivity.java')
+		'./config/native/android/src/com/evothings/evothingsviewer/MainActivity.java',
+		'./platforms/android/src/com/evothings/evothingsviewer/MainActivity.java')
 }

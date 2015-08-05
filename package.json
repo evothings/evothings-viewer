@@ -35,7 +35,7 @@
 		{ "id": "pl.makingwaves.estimotebeacons" },
 		{ "id": "com.megster.cordova.bluetoothserial" },
 		{ "id": "com.evothings.ble" },
-		{ "id": "com.evothings.evothings-studio-app.config-plugin",
+		{ "id": "com.evothings.evothingsviewer.config-plugin",
 		  "location": "config/config-plugin" }
 	],
 	"plugins-unused": [

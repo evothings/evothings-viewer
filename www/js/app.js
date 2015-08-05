@@ -1,4 +1,4 @@
-// Application code for the Evothings Studio App.
+// Application code for the Evothings Viewer app.
 
 // Debug logging used when developing the app in Evothings Studio.
 if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error = hyper.log }
@@ -7,10 +7,7 @@ if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error =
 var app = {}
 
 // Production server address.
-var SERVER_ADDRESS = 'http://evothings.com:8081'
-
-// Use your machine's IP address for testing.
-//var SERVER_ADDRESS = 'http://192.168.43.247:8081' // Micke's test address
+app.serverAddress = 'http://staging.evothings.com:8081'
 
 app.initialize = function()
 {
@@ -18,12 +15,15 @@ app.initialize = function()
 
 	app.hideSpinner()
 
-	// Page navigation.
-	$('#info_button').bind('click', {articleId: 'info'}, app.showArticle)
+	$('#menuitem-main').on('click', app.showMain)
+	$('#menuitem-info').on('click', app.showInfo)
+	$('#menuitem-settings').on('click', app.showSettings)
 
 	$(function()
 	{
 		//FastClick.attach(document.body)
+
+		app.setSavedServerAddress()
 	})
 }
 
@@ -37,7 +37,7 @@ app.onConnectButton = function()
 	app.showSpinner()
 
 	// Get contents of url text field.
-	var keyOrURL = document.getElementById('hyper-key').value.trim()
+	var keyOrURL = document.getElementById('input-connect-key').value.trim()
 
 	// Is it a key code?
 	if (/^\d{4}$/.test(keyOrURL))
@@ -99,19 +99,38 @@ app.connectWithKey = function(key)
 	})
 }
 
+app.onSaveSettingsButton = function()
+{
+	var address = document.getElementById('input-server-address').value.trim()
+	app.saveServerAddress(address)
+}
+
+// Set the server to the saved value, if any.
+app.setSavedServerAddress = function()
+{
+	app.serverAddress = localStorage.getItem('server-address') || app.serverAddress
+	document.getElementById("input-server-address").value = app.serverAddress
+}
+
+app.saveServerAddress = function(address)
+{
+	localStorage.setItem('server-address', address)
+	app.serverAddress = address
+}
+
 app.showMessage = function(message)
 {
-	$('#hyper-message').html(message)
+	$('#message').html(message)
 }
 
 app.showSpinner = function()
 {
-	$('#hyper-spinner').show()
+	$('#spinner').show()
 }
 
 app.hideSpinner = function()
 {
-	$('#hyper-spinner').hide()
+	$('#spinner').hide()
 }
 
 app.openBrowser = function(url)
@@ -119,27 +138,31 @@ app.openBrowser = function(url)
 	window.open(url, '_system', 'location=yes')
 }
 
-app.showArticle = function(event)
-{
-	var articlePage = $('article#' + event.data.articleId)
-
-	$('main').toggle()
-	articlePage.toggle()
-
-	if (articlePage.is(":visible"))
-		$(this).text('Connect')
-	else
-		$(this).text('Info')
-}
-
 app.showMain = function()
 {
+	app.hideScreens()
 	$('main').show()
-	$('article').hide()
-	$('#info_button').text('Info')
-	$('header button.back').hide()
+	//$('header button.back').hide()
+}
+
+app.showInfo = function(event)
+{
+	app.hideScreens()
+	$('#screen-info').show()
+}
+
+app.showSettings = function()
+{
+	app.hideScreens()
+	$('#screen-settings').show()
+}
+
+app.hideScreens = function()
+{
+	$('main').hide()
+	$('#screen-info').hide()
+	$('#screen-settings').hide()
 }
 
 // App main entry point.
 app.initialize()
-
