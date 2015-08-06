@@ -61,7 +61,7 @@ app.onConnectButton = function()
 app.connectWithKey = function(key)
 {
 	// Check that key exists.
-	var requestURL = SERVER_ADDRESS + '/check-connect-key/' + key
+	var requestURL = app.serverAddress + '/check-connect-key/' + key
 	var request = $.ajax(
 		{
 			timeout: 5000,
@@ -76,8 +76,8 @@ app.connectWithKey = function(key)
 		if ('KEY-OK' == data)
 		{
 			// Connect to server.
-			var serverURL = SERVER_ADDRESS + '/connect/' + key
-			app.showMessage('Connecting to: ' + serverURL)
+			var serverURL = app.serverAddress + '/connect/' + key
+			//app.showMessage('Connecting to: <br/>' + serverURL)
 			window.location.assign(serverURL)
 		}
 		else if ('KEY-NOT-OK' == data)
