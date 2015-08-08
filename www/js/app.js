@@ -39,22 +39,18 @@ app.onConnectButton = function()
 	// Get contents of url text field.
 	var keyOrURL = document.getElementById('input-connect-key').value.trim()
 
-	// Is it a key code?
-	if (/^\d{4}$/.test(keyOrURL))
+	// Does it look like a URL?
+	if ((0 == keyOrURL.indexOf('http://')) ||
+		(0 == keyOrURL.indexOf('https://')))
 	{
-		// Check if the code exists and connect to the server if ok.
-		app.connectWithKey(keyOrURL)
-	}
-	else if (0 == keyOrURL.indexOf('http://'))
-	{
-		// This looks like a URL, launch it.
+		// Open the URL.
 		window.location.assign(keyOrURL)
 	}
 	else
 	{
-		// Neither key nor URL. Display message.
-		app.showMessage('Please enter a connect key or URL.')
-		app.hideSpinner()
+		// Not a URL, assuming a connect code.
+		// Check if the code exists and connect to the server if ok.
+		app.connectWithKey(keyOrURL)
 	}
 }
 
@@ -114,8 +110,12 @@ app.setSavedServerAddress = function()
 
 app.saveServerAddress = function(address)
 {
+	// Save the server address.
 	localStorage.setItem('server-address', address)
 	app.serverAddress = address
+
+	// Go back to the main screen.
+	setTimeout(app.showMain, 500)
 }
 
 app.showMessage = function(message)
