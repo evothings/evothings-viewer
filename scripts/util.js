@@ -79,6 +79,15 @@ function getAppVersion(cordovaContext)
 	return tree.getroot().attrib.version
 }
 
+function getAppName(cordovaContext)
+{
+	// Get version from config.xml.
+	var ET = cordovaContext.requireCordovaModule('elementtree')
+	var config = readFileUTF8('./config.xml')
+	var tree = ET.parse(config)
+	return tree.findtext('./name');
+}
+
 function getPluginVersions(cordovaContext)
 {
 	// Get plugin versions from plugin.xml files.
@@ -138,6 +147,7 @@ exports.writeFileUTF8 = writeFileUTF8
 exports.copyFileUTF8 = copyFileUTF8
 exports.cleanUp = cleanUp
 exports.getAppVersion = getAppVersion
+exports.getAppName = getAppName
 exports.getPluginVersions = getPluginVersions
 exports.getInstalledPlugins = getInstalledPlugins
 exports.insertVersionInfo = insertVersionInfo

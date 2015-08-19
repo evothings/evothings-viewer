@@ -9,11 +9,14 @@ module.exports = function(context)
 	// Insert version info into target index.html.
 	UTIL.insertVersionInfo(context, './platforms/ios/www/index.html')
 
+	var name = UTIL.getAppName(context)
+	console.log('@@@ name: '+name)
+
 	// Copy files.
 	UTIL.copyFileUTF8(
 		'./config/native/ios/AppDelegate.m',
-		'./platforms/ios/Evothings/Classes/AppDelegate.m')
+		'./platforms/ios/'+name+'/Classes/AppDelegate.m')
 	UTIL.copyFileUTF8(
 		'./config/native/ios/main.m',
-		'./platforms/ios/Evothings/main.m')
+		'./platforms/ios/'+name+'/main.m')
 }
