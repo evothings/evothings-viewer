@@ -25,6 +25,7 @@
 		{ "id": "cordova-plugin-inappbrowser" },
 		{ "id": "cordova-plugin-network-information" },
 		{ "id": "cordova-plugin-statusbar" },
+		{ "id": "cordova-plugin-vibration" },
 		{ "id": "cordova-plugin-chrome-apps-common" },
 		{ "id": "cordova-plugin-chrome-apps-system-network" },
 		{ "id": "cordova-plugin-chrome-apps-iossocketscommon" },
