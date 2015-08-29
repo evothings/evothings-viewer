@@ -27,7 +27,7 @@
 	<preference name="BackupWebStorage" value="local" />
 	<preference name="android-minSdkVersion" value="14" />
 
-	<hook type="before_build" src="scripts/before_build.js" />
+	<hook type="before_prepare" src="scripts/before_prepare.js" />
 
 	<platform name="android">
 		<hook type="after_prepare" src="scripts/after_prepare_android.js" />
