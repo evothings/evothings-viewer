@@ -11,23 +11,23 @@
 
 	<platform name="android">
 		<config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-        	<intent-filter>
-            	<data android:scheme="evothings" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-       		</intent-filter>
+			<intent-filter>
+				<data android:scheme="evothings" />
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+			</intent-filter>
 		</config-file>
 	</platform>
 
 	<platform name="ios">
-        <config-file target="*-Info.plist" parent="UIStatusBarHidden">
+		<config-file target="*-Info.plist" parent="UIStatusBarHidden">
 			<true/>
-        </config-file>
-        <config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
+		</config-file>
+		<config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
 			<false/>
-        </config-file>
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+		</config-file>
+		<config-file target="*-Info.plist" parent="CFBundleURLTypes">
 			<array>
 				<dict>
 					<key>CFBundleURLSchemes</key>
@@ -36,23 +36,28 @@
 					</array>
 				</dict>
 			</array>
-        </config-file>
-        <config-file target="*-Info.plist" parent="UISupportedInterfaceOrientations">
+		</config-file>
+		<config-file target="*-Info.plist" parent="UISupportedInterfaceOrientations">
 			<array>
 				<string>UIInterfaceOrientationPortrait</string>
 				<string>UIInterfaceOrientationPortraitUpsideDown</string>
 				<string>UIInterfaceOrientationLandscapeLeft</string>
 				<string>UIInterfaceOrientationLandscapeRight</string>
 			</array>
-        </config-file>
-        <config-file target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
+		</config-file>
+		<config-file target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
 			<array>
 				<string>UIInterfaceOrientationPortrait</string>
 				<string>UIInterfaceOrientationPortraitUpsideDown</string>
 				<string>UIInterfaceOrientationLandscapeLeft</string>
 				<string>UIInterfaceOrientationLandscapeRight</string>
 			</array>
-        </config-file>
+		</config-file>
+		<config-file target="*-Info.plist" parent="UIBackgroundModes">
+			<array>
+			<string>bluetooth-central</string>
+			</array>
+		</config-file>
 	</platform>
 
 </plugin>
