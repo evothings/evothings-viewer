@@ -29,6 +29,14 @@ app.initialize = function()
 
 app.onDeviceReady = function()
 {
+	// Display login/logout buttons if client id is set.
+	var clientID = localStorage.getItem('client-id')
+	if (clientID)
+	{
+		// TODO: Implement
+		// Display buttons.
+		//$('#extra-ui').append()
+	}
 }
 
 app.onConnectButton = function()
@@ -80,6 +88,15 @@ app.connectWithKey = function(key)
 		{
 			app.showMessage('Invalid or expired key, please get a new key and try again.')
 			app.hideSpinner()
+		}
+		else if (data.length > 7) // This is a client id
+		{
+			// Store client id.
+			localStorage.setItem('client-id', data)
+
+			// Connect.
+			var serverURL = app.serverAddress + '/connect-with-clientid/' + data
+			window.location.assign(serverURL)
 		}
 		else
 		{
