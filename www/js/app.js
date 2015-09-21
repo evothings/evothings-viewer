@@ -21,21 +21,74 @@ app.initialize = function()
 
 	$(function()
 	{
-		//FastClick.attach(document.body)
+		FastClick.attach(document.body)
 
 		app.setSavedServerAddress()
+
+		// For debugging. TODO: Remove.
+		app.onDeviceReady()
 	})
 }
 
 app.onDeviceReady = function()
 {
-	// Display login/logout buttons if client id is set.
+	app.displayExtraUI()
+}
+
+app.displayExtraUI = function()
+{
+	// Display login/logout buttons if there is a saved client id.
 	var clientID = localStorage.getItem('client-id')
-	if (clientID)
+	if (!clientID)
 	{
-		// TODO: Implement
-		// Display buttons.
-		//$('#extra-ui').append()
+		$('#extra-ui').html('')
+		return
+	}
+
+	app.showMessage('Checking login status...')
+	app.showSpinner()
+
+	// Ask server for user name.
+	var requestURL = app.serverAddress + '/check-client-id/' + clientID
+	var request = $.ajax(
+		{
+			timeout: 5000,
+			url: requestURL,
+		})
+
+	// Process response.
+	request.done(function(data)
+	{
+		app.hideSpinner()
+
+		// For debugging.
+		// TODO: Remove.
+		app.showMessage('Last logged in user: ' + data)
+
+		if ('__UNKNOWN_USER__' != data)
+		{
+			// We got a logged in user. Display login/logout buttons.
+			displayButtons(data)
+		}
+	})
+
+	request.fail(function(jqxhr)
+	{
+		app.showMessage('Could not connect to server. Please check your Internet connection and try again.')
+		app.hideSpinner()
+	})
+
+	function displayButtons(userName)
+	{
+		var html =
+			'<style>button { font-size:65%; }</style>' +
+			'<button id="button-connect" ' +
+				'onclick="app.onLoginButton()" class="green">' +
+				'Connect as<br/>' +  userName + '</button><br/>' +
+			'<button id="button-connect" ' +
+				'onclick="app.onLogoutButton()" class="red">' +
+				'Logout<br/>' +  userName + '</button><br/>'
+		$('#extra-ui').html(html)
 	}
 }
 
@@ -62,10 +115,46 @@ app.onConnectButton = function()
 	}
 }
 
+app.onLoginButton = function()
+{
+	var clientID = localStorage.getItem('client-id')
+	var serverURL = app.serverAddress + '/connect-with-client-id/' + clientID
+	window.location.assign(serverURL)
+}
+
+app.onLogoutButton = function()
+{
+	var clientID = localStorage.getItem('client-id')
+	app.showMessage('Logging out...')
+	app.showSpinner()
+
+	var requestURL = app.serverAddress + '/logout-mobile-client/' + clientID
+	var request = $.ajax(
+		{
+			timeout: 5000,
+			url: requestURL,
+		})
+
+	// If key exists, connect to Workbench.
+	request.done(function(data)
+	{
+		app.showMessage('Logged out')
+		app.hideSpinner()
+		localStorage.removeItem('client-id')
+		$('#extra-ui').html('')
+	})
+
+	request.fail(function(jqxhr)
+	{
+		app.showMessage('Could not log out')
+		app.hideSpinner()
+	})
+}
+
 app.connectWithKey = function(key)
 {
 	// Check that key exists.
-	var requestURL = app.serverAddress + '/check-connect-key/' + key
+	var requestURL = app.serverAddress + '/check-connect-key-return-client-id/' + key
 	var request = $.ajax(
 		{
 			timeout: 5000,
@@ -77,14 +166,7 @@ app.connectWithKey = function(key)
 	{
 		app.showMessage('Result: ' + data)
 
-		if ('KEY-OK' == data)
-		{
-			// Connect to server.
-			var serverURL = app.serverAddress + '/connect/' + key
-			//app.showMessage('Connecting to: <br/>' + serverURL)
-			window.location.assign(serverURL)
-		}
-		else if ('KEY-NOT-OK' == data)
+		if ('KEY-NOT-OK' == data)
 		{
 			app.showMessage('Invalid or expired key, please get a new key and try again.')
 			app.hideSpinner()
@@ -95,7 +177,7 @@ app.connectWithKey = function(key)
 			localStorage.setItem('client-id', data)
 
 			// Connect.
-			var serverURL = app.serverAddress + '/connect-with-clientid/' + data
+			var serverURL = app.serverAddress + '/connect-with-client-id/' + data
 			window.location.assign(serverURL)
 		}
 		else
@@ -123,6 +205,7 @@ app.setSavedServerAddress = function()
 {
 	app.serverAddress = localStorage.getItem('server-address') || app.serverAddress
 	document.getElementById("input-server-address").value = app.serverAddress
+	console.log('app.serverAddress: ' + app.serverAddress)
 }
 
 app.saveServerAddress = function(address)
