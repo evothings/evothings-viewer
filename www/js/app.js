@@ -63,12 +63,12 @@ app.displayExtraUI = function()
 
 		// For debugging.
 		// TODO: Remove.
-		app.showMessage('Last logged in user: ' + data)
+		app.showMessage('Last logged in user: ' + data.userName)
 
-		if ('__UNKNOWN_USER__' != data)
+		if (data.isValid)
 		{
 			// We got a logged in user. Display login/logout buttons.
-			displayButtons(data)
+			displayButtons(data.userName)
 		}
 	})
 
@@ -153,6 +153,8 @@ app.onLogoutButton = function()
 
 app.connectWithKey = function(key)
 {
+	console.log('app.connectWithKey: ' + key)
+
 	// Check that key exists.
 	var requestURL = app.serverAddress + '/check-connect-key-return-client-id/' + key
 	var request = $.ajax(
@@ -164,20 +166,21 @@ app.connectWithKey = function(key)
 	// If key exists, connect to Workbench.
 	request.done(function(data)
 	{
-		app.showMessage('Result: ' + data)
+		app.showMessage('Result: ' + JSON.stringify(data))
+		console.log('Data: ' + JSON.stringify(data))
 
-		if ('KEY-NOT-OK' == data)
+		if (!data.isValid)
 		{
 			app.showMessage('Invalid or expired key, please get a new key and try again.')
 			app.hideSpinner()
 		}
-		else if (data.length > 7) // This is a client id
+		else if (data.clientID)
 		{
 			// Store client id.
-			localStorage.setItem('client-id', data)
+			localStorage.setItem('client-id', data.clientID)
 
 			// Connect.
-			var serverURL = app.serverAddress + '/connect-with-client-id/' + data
+			var serverURL = app.serverAddress + '/connect-with-client-id/' + data.clientID
 			window.location.assign(serverURL)
 		}
 		else
