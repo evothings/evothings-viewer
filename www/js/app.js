@@ -7,7 +7,7 @@ if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error =
 var app = {}
 
 // Production server address.
-app.serverAddress = 'http://staging.evothings.com:8081'
+app.serverAddress = 'https://deploy.evothings.com'
 
 app.initialize = function()
 {
@@ -63,7 +63,7 @@ app.displayExtraUI = function()
 
 		// For debugging.
 		// TODO: Remove.
-		app.showMessage('Last logged in user: ' + data.userName)
+		//app.showMessage('Last logged in user: ' + data.userName)
 
 		if (data.isValid)
 		{
@@ -166,9 +166,6 @@ app.connectWithKey = function(key)
 	// If key exists, connect to Workbench.
 	request.done(function(data)
 	{
-		app.showMessage('Result: ' + JSON.stringify(data))
-		console.log('Data: ' + JSON.stringify(data))
-
 		if (!data.isValid)
 		{
 			app.showMessage('Invalid or expired key, please get a new key and try again.')
