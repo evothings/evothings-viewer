@@ -49,7 +49,7 @@ app.displayExtraUI = function()
 	app.showSpinner()
 
 	// Ask server for user name.
-	var requestURL = app.serverAddress + '/check-client-id/' + clientID
+	var requestURL = app.serverAddress + '/get-info-for-client-id/' + clientID
 	var request = $.ajax(
 		{
 			timeout: 5000,
@@ -111,15 +111,26 @@ app.onConnectButton = function()
 	{
 		// Not a URL, assuming a connect code.
 		// Check if the code exists and connect to the server if ok.
-		app.connectWithKey(keyOrURL)
+		app.connectWithKey(keyOrURL, app.serverAddress, 0)
+		app.getServerForConnectKey(keyOrURL)
 	}
 }
 
 app.onLoginButton = function()
 {
 	var clientID = localStorage.getItem('client-id')
-	var serverURL = app.serverAddress + '/connect-with-client-id/' + clientID
-	window.location.assign(serverURL)
+	var serverAddress = localStorage.getItem('session-server-address')
+	if (clientID && serverAddress)
+	{
+		app.showSpinner()
+		var serverURL = serverAddress + '/connect-with-client-id/' + clientID
+		window.location.assign(serverURL)
+	}
+	else
+	{
+		app.hideSpinner()
+		app.showMessage('Could not connect, please connect with a new connect key.')
+	}
 }
 
 app.onLogoutButton = function()
@@ -151,12 +162,47 @@ app.onLogoutButton = function()
 	})
 }
 
-app.connectWithKey = function(key)
+/**
+ * Ask server set in app for which server to use to connect, based on the connect key.
+ */
+app.getServerForConnectKey = function(key)
 {
-	console.log('app.connectWithKey: ' + key)
+	// Ask the default server for which server to use with this key.
+	var requestURL = app.serverAddress + '/get-info-for-connect-key/' + key
+	var request = $.ajax(
+		{
+			timeout: 5000,
+			url: requestURL,
+		})
 
+	request.done(function(data)
+	{
+		if (data.isValid && data.serverAddress)
+		{
+			// Store the server address for this key.
+			localStorage.setItem('session-server-address', data.serverAddress)
+
+			// Validate key with the server and connect.
+			app.validateConnectKeyAndConnect(key, data.serverAddress)
+		}
+		else
+		{
+			app.showMessage('Could not find server for connect key, please retype the key or try with a new key.')
+			app.hideSpinner()
+		}
+	})
+
+	request.fail(function(jqxhr)
+	{
+		app.showMessage('Could not connect. Please check your Internet connection and try again.')
+		app.hideSpinner()
+	})
+}
+
+app.validateConnectKeyAndConnect = function(key, serverAddress)
+{
 	// Check that key exists.
-	var requestURL = app.serverAddress + '/check-connect-key-return-client-id/' + key
+	var requestURL = serverAddress + '/validate-connect-key/' + key
 	var request = $.ajax(
 		{
 			timeout: 5000,
@@ -177,12 +223,12 @@ app.connectWithKey = function(key)
 			localStorage.setItem('client-id', data.clientID)
 
 			// Connect.
-			var serverURL = app.serverAddress + '/connect-with-client-id/' + data.clientID
+			var serverURL = serverAddress + '/connect-with-client-id/' + data.clientID
 			window.location.assign(serverURL)
 		}
 		else
 		{
-			app.showMessage('Something went wrong. Server did not respond as expected. Please report this error.')
+			app.showMessage('Something went wrong. Server did not respond as expected.')
 			app.hideSpinner()
 		}
 	})
