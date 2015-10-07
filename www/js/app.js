@@ -1,34 +1,41 @@
 // Application code for the Evothings Viewer app.
 
 // Debug logging used when developing the app in Evothings Studio.
-if (window.hyper && window.hyper.log) { console.log = hyper.log; console.error = hyper.log }
+/*
+if (window.hyper && window.hyper.log)
+{
+	console.log = hyper.log
+	console.error = hyper.log
+}
+*/
 
 // Application object.
 var app = {}
 
 // Production server address.
-app.serverAddress = 'https://deploy.evothings.com'
+app.defaultServerAddress = 'https://deploy.evothings.com'
 
 app.initialize = function()
 {
-	document.addEventListener('deviceready', app.onDeviceReady, false)
-
 	app.hideSpinner()
 
 	$('#menuitem-main').on('click', app.showMain)
 	$('#menuitem-info').on('click', app.showInfo)
 	$('#menuitem-settings').on('click', app.showSettings)
 
+	// We call onDeviceReady explicitly instead of using Cordova event.
+	//document.addEventListener('deviceready', app.onDeviceReady, false)
+
 	$(function()
 	{
 		FastClick.attach(document.body)
 
-		app.setSavedServerAddress()
+		app.setServerAddressField()
 
-		// For debugging. TODO: Remove.
 		app.onDeviceReady()
 	})
 }
+
 
 app.onDeviceReady = function()
 {
@@ -38,45 +45,50 @@ app.onDeviceReady = function()
 app.displayExtraUI = function()
 {
 	// Display login/logout buttons if there is a saved client id.
-	var clientID = localStorage.getItem('client-id')
+	var clientID = app.getClientID()
 	if (!clientID)
 	{
 		$('#extra-ui').html('')
 		return
 	}
 
-	app.showMessage('Checking login status...')
-	app.showSpinner()
+	var serverAddress = app.getSessionServerAddress()
+	if (serverAddress)
+	{
+		//app.showMessage('Checking login status...')
+		app.showSpinner()
 
-	// Ask server for user name.
-	var requestURL = app.serverAddress + '/get-info-for-client-id/' + clientID
-	var request = $.ajax(
+		// Ask server for user name.
+		var requestURL = serverAddress + '/get-info-for-client-id/' + clientID
+
+		var request = $.ajax(
+			{
+				timeout: 5000,
+				url: requestURL,
+			})
+
+		// Process response.
+		request.done(function(data)
 		{
-			timeout: 5000,
-			url: requestURL,
+			app.hideSpinner()
+
+			// For debugging.
+			// TODO: Remove.
+			//app.showMessage('Last logged in user: ' + data.userName)
+
+			if (data.isValid)
+			{
+				// We got a logged in user. Display login/logout buttons.
+				displayButtons(data.userName)
+			}
 		})
 
-	// Process response.
-	request.done(function(data)
-	{
-		app.hideSpinner()
-
-		// For debugging.
-		// TODO: Remove.
-		//app.showMessage('Last logged in user: ' + data.userName)
-
-		if (data.isValid)
+		request.fail(function(jqxhr)
 		{
-			// We got a logged in user. Display login/logout buttons.
-			displayButtons(data.userName)
-		}
-	})
-
-	request.fail(function(jqxhr)
-	{
-		app.showMessage('Could not connect to server. Please check your Internet connection and try again.')
-		app.hideSpinner()
-	})
+			app.showMessage('Could not connect to server. Please check your Internet connection and try again.')
+			app.hideSpinner()
+		})
+	}
 
 	function displayButtons(userName)
 	{
@@ -111,15 +123,14 @@ app.onConnectButton = function()
 	{
 		// Not a URL, assuming a connect code.
 		// Check if the code exists and connect to the server if ok.
-		app.connectWithKey(keyOrURL, app.serverAddress, 0)
 		app.getServerForConnectKey(keyOrURL)
 	}
 }
 
 app.onLoginButton = function()
 {
-	var clientID = localStorage.getItem('client-id')
-	var serverAddress = localStorage.getItem('session-server-address')
+	var clientID = app.getClientID()
+	var serverAddress = app.getSessionServerAddress()
 	if (clientID && serverAddress)
 	{
 		app.showSpinner()
@@ -135,31 +146,40 @@ app.onLoginButton = function()
 
 app.onLogoutButton = function()
 {
-	var clientID = localStorage.getItem('client-id')
-	app.showMessage('Logging out...')
-	app.showSpinner()
+	var clientID = app.getClientID()
+	var serverAddress = app.getSessionServerAddress()
+	if (clientID && serverAddress)
+	{
+		app.showSpinner()
+		app.showMessage('Logging out...')
 
-	var requestURL = app.serverAddress + '/logout-mobile-client/' + clientID
-	var request = $.ajax(
+		var requestURL = serverAddress + '/logout-mobile-client/' + clientID
+		var request = $.ajax(
+			{
+				timeout: 5000,
+				url: requestURL,
+			})
+
+		// If key exists, connect to Workbench.
+		request.done(function(data)
 		{
-			timeout: 5000,
-			url: requestURL,
+			app.showMessage('Logged out')
+			app.hideSpinner()
+			localStorage.removeItem('client-id')
+			$('#extra-ui').html('')
 		})
 
-	// If key exists, connect to Workbench.
-	request.done(function(data)
-	{
-		app.showMessage('Logged out')
-		app.hideSpinner()
-		localStorage.removeItem('client-id')
-		$('#extra-ui').html('')
-	})
-
-	request.fail(function(jqxhr)
+		request.fail(function(jqxhr)
+		{
+			app.showMessage('Could not log out')
+			app.hideSpinner()
+		})
+	}
+	else
 	{
 		app.showMessage('Could not log out')
 		app.hideSpinner()
-	})
+	}
 }
 
 /**
@@ -168,7 +188,8 @@ app.onLogoutButton = function()
 app.getServerForConnectKey = function(key)
 {
 	// Ask the default server for which server to use with this key.
-	var requestURL = app.serverAddress + '/get-info-for-connect-key/' + key
+	var requestURL = app.getServerAddress() + '/get-info-for-connect-key/' + key
+
 	var request = $.ajax(
 		{
 			timeout: 5000,
@@ -247,21 +268,34 @@ app.onSaveSettingsButton = function()
 }
 
 // Set the server to the saved value, if any.
-app.setSavedServerAddress = function()
+app.setServerAddressField = function()
 {
-	app.serverAddress = localStorage.getItem('server-address') || app.serverAddress
-	document.getElementById("input-server-address").value = app.serverAddress
-	console.log('app.serverAddress: ' + app.serverAddress)
+	var serverAddress = app.getServerAddress()
+	document.getElementById('input-server-address').value = serverAddress
 }
 
 app.saveServerAddress = function(address)
 {
 	// Save the server address.
 	localStorage.setItem('server-address', address)
-	app.serverAddress = address
 
 	// Go back to the main screen.
 	setTimeout(app.showMain, 500)
+}
+
+app.getServerAddress = function()
+{
+	return localStorage.getItem('server-address') || app.defaultServerAddress
+}
+
+app.getSessionServerAddress = function()
+{
+	return localStorage.getItem('session-server-address')
+}
+
+app.getClientID = function()
+{
+	return localStorage.getItem('client-id')
 }
 
 app.showMessage = function(message)
