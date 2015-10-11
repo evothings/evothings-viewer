@@ -376,8 +376,12 @@ input.btn-group + label,
 body > button,
 body > input.btn-group + label,
 main > button,
-main > input.btn-group + label {
+main > input.btn-group + label,
+button.small {
 	font-size: 63% !important;
+}
+button.medium {
+	font-size: 100% !important;
 }
 button:active, button.pressed,
 input.btn-group:active + label, input.btn-group + label:active,

@@ -33,22 +33,29 @@ app.initialize = function()
 		app.setServerAddressField()
 
 		app.onDeviceReady()
+
+		app.loadAddOnScript()
 	})
 }
 
+app.loadAddOnScript = function()
+{
+	var url = app.getServerAddress() + '/server-www/static/evothings-viewer-addons.js'
+	evothings.loadScript(url)
+}
 
 app.onDeviceReady = function()
 {
-	app.displayExtraUI()
+	app.displayQuickConnectUI()
 }
 
-app.displayExtraUI = function()
+app.displayQuickConnectUI = function()
 {
 	// Display login/logout buttons if there is a saved client id.
 	var clientID = app.getClientID()
 	if (!clientID)
 	{
-		$('#extra-ui').html('')
+		$('#quick-connect-ui').html('')
 		return
 	}
 
@@ -79,7 +86,7 @@ app.displayExtraUI = function()
 			if (data.isValid)
 			{
 				// We got a logged in user. Display login/logout buttons.
-				displayButtons(data.userName)
+				app.displayButtons(data.userName)
 			}
 		})
 
@@ -89,19 +96,19 @@ app.displayExtraUI = function()
 			app.hideSpinner()
 		})
 	}
+}
 
-	function displayButtons(userName)
-	{
-		var html =
-			'<style>button { font-size:65%; }</style>' +
-			'<button id="button-connect" ' +
-				'onclick="app.onLoginButton()" class="green">' +
-				'Connect as<br/>' +  userName + '</button><br/>' +
-			'<button id="button-connect" ' +
-				'onclick="app.onLogoutButton()" class="red">' +
-				'Logout<br/>' +  userName + '</button><br/>'
-		$('#extra-ui').html(html)
-	}
+app.displayButtons = function(userName)
+{
+	var html =
+		'<style>button { font-size:65%; }</style>' +
+		'<button id="button-connect" ' +
+			'onclick="app.onLoginButton()" class="green">' +
+			'Connect as<br/>' +  userName + '</button><br/>' +
+		'<button id="button-connect" ' +
+			'onclick="app.onLogoutButton()" class="red">' +
+			'Logout<br/>' +  userName + '</button><br/>'
+	$('#quick-connect-ui').html(html)
 }
 
 app.onConnectButton = function()
@@ -166,7 +173,7 @@ app.onLogoutButton = function()
 			app.showMessage('Logged out')
 			app.hideSpinner()
 			localStorage.removeItem('client-id')
-			$('#extra-ui').html('')
+			$('#quick-connect-ui').html('')
 		})
 
 		request.fail(function(jqxhr)

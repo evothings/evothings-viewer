@@ -45,29 +45,36 @@
 		</menu>
 	</header>
 
-	<main>
+	<main id="screen-main">
 		<h1>Evothings Viewer</h1>
 
-		<input id="input-connect-key" type="url" placeholder="Enter connect key" />
-		<br/>
-		<button id="button-connect" onclick="app.onConnectButton()" class="stone">
+		<div id="message-ui">
+			<input id="input-connect-key" type="url" placeholder="" />
+			<br/>
+			<button id="button-connect" class="small" onclick="app.onConnectButton()" class="stone">
 			Connect
-		</button>
-		<div>
+			</button>
+		</div>
+
+		<div id="message-ui">
 			<p id="message"></p>
 			<img id="spinner" src="ui/images/loader.gif"/>
 		</div>
+
+		<div id="quick-connect-ui">
+		</div>
+
 		<div id="extra-ui">
 		</div>
 	</main>
 
 	<article id="screen-info">
-		<h1>Info</h1>
-
+		<h1 id="info-heading">Info</h1>
+		<div>
 		<p>This is the companion app for Evothings Studio 2.0.</p>
 
 		<p>Use this app with the Evothings Studio 2.0 Workbench desktop application to develop mobile apps for IoT in HTML5/JavaScript. The desktop application is available at <a href="javascript:app.openBrowser('http://evothings.com/download')">evothings.com/download</a>.</p>
-
+		</div>
 		<h2>How to use</h2>
 
 		<p>Launch the Evothings Workbench desktop application. Follow the on screen instructions to get a connect key.</p>
@@ -82,10 +89,10 @@
 		<a href="javascript:app.openBrowser('http://evothings.com')">evothings.com</a> (note that tutorials are not yet updated for Evothings Studio 2.0, but all tutorial examples and JavaScript libraries are fully compatible with this app).</p>
 
 		<h2>App version</h2>
-		<p>__APP_VERSION__</p>
+		<p id="info-app-version">__APP_VERSION__</p>
 
 		<h2>Plugin versions</h2>
-		<p>__PLUGIN_VERSIONS__</p>
+		<p id="info-plugin-versions">__PLUGIN_VERSIONS__</p>
 
 		<h2>Contact</h2>
 
@@ -110,7 +117,6 @@
 	<script src="libs/fastclick/fastclick.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
 	<script src="js/app.js"></script>
-	<xscript src="http://evothings.com/evothings-viewer-script.js"></xscript>
 
 </body>
 </html>
