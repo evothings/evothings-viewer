@@ -23,7 +23,7 @@ app.initialize = function()
 	$('#menuitem-info').on('click', app.showInfo)
 	$('#menuitem-settings').on('click', app.showSettings)
 
-	// We call onDeviceReady explicitly instead of using Cordova event.
+	// We call onDeviceReady ourselves instead of using Cordova event.
 	//document.addEventListener('deviceready', app.onDeviceReady, false)
 
 	$(function()
@@ -32,16 +32,16 @@ app.initialize = function()
 
 		app.setServerAddressField()
 
-		app.onDeviceReady()
-
-		app.loadAddOnScript()
+		// When script has finished loading we call onDeviceReady.
+		app.loadAddOnScript(
+			app.onDeviceReady)
 	})
 }
 
-app.loadAddOnScript = function()
+app.loadAddOnScript = function(loadedCallback)
 {
 	var url = app.getServerAddress() + '/server-www/static/evothings-viewer-addons.js'
-	evothings.loadScript(url)
+	evothings.loadScript(url, loadedCallback)
 }
 
 app.onDeviceReady = function()
@@ -147,7 +147,7 @@ app.onLoginButton = function()
 	else
 	{
 		app.hideSpinner()
-		app.showMessage('Could not connect, please connect with a new connect key.')
+		app.showMessage('Could not connect to the last active session, please connect with a new connect key.')
 	}
 }
 
@@ -263,7 +263,7 @@ app.validateConnectKeyAndConnect = function(key, serverAddress)
 
 	request.fail(function(jqxhr)
 	{
-		app.showMessage('Could not connect. Please check your Internet connection and try again.')
+		app.showMessage('Could not validate the connect key. Please check your Internet connection and try again.')
 		app.hideSpinner()
 	})
 }
@@ -284,15 +284,22 @@ app.setServerAddressField = function()
 app.saveServerAddress = function(address)
 {
 	// Save the server address.
-	localStorage.setItem('server-address', address)
+	sessionStorage.setItem('server-address', address)
 
-	// Go back to the main screen.
-	setTimeout(app.showMain, 500)
+	// Reload the add-on script after change of server address.
+	app.loadAddOnScript(function()
+	{
+		// Call onDeviceReady.
+		app.onDeviceReady()
+
+		// Go back to the main screen.
+		app.showMain()
+	})
 }
 
 app.getServerAddress = function()
 {
-	return localStorage.getItem('server-address') || app.defaultServerAddress
+	return sessionStorage.getItem('server-address') || app.defaultServerAddress
 }
 
 app.getSessionServerAddress = function()
