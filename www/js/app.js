@@ -22,6 +22,8 @@ app.initialize = function()
 	$('#menuitem-main').on('click', app.showMain)
 	$('#menuitem-info').on('click', app.showInfo)
 	$('#menuitem-settings').on('click', app.showSettings)
+	$('#button-connect').on('click', app.onConnectButton)
+	$('#input-connect-key').on('input', app.setConnectButtonColor)
 
 	// We call onDeviceReady ourselves instead of using Cordova event.
 	//document.addEventListener('deviceready', app.onDeviceReady, false)
@@ -101,7 +103,7 @@ app.displayQuickConnectUI = function()
 app.displayButtons = function(userName)
 {
 	var html =
-		'<style>button { font-size:65%; }</style>' +
+		'<style>button { font-size:50%; width:100%; }</style>' +
 		'<button id="button-connect" ' +
 			'onclick="app.onLoginButton()" class="green">' +
 			'Connect as<br/>' +  userName + '</button><br/>' +
@@ -111,13 +113,28 @@ app.displayButtons = function(userName)
 	$('#quick-connect-ui').html(html)
 }
 
+app.setConnectButtonColor = function()
+{
+	var value = $('#input-connect-key').val().trim()
+	if (value.length < 1)
+	{
+		$('#button-connect').removeClass('stone')
+		$('#button-connect').addClass('jetblack')
+	}
+	else
+	{
+		$('#button-connect').removeClass('jetblack')
+		$('#button-connect').addClass('stone')
+	}
+}
+
 app.onConnectButton = function()
 {
 	app.showMessage('Connecting...')
 	app.showSpinner()
 
 	// Get contents of url text field.
-	var keyOrURL = document.getElementById('input-connect-key').value.trim()
+	var keyOrURL = $('#input-connect-key').val().trim()
 
 	// Does it look like a URL?
 	if ((0 == keyOrURL.indexOf('http://')) ||
@@ -140,7 +157,6 @@ app.onLoginButton = function()
 	var serverAddress = app.getSessionServerAddress()
 	if (clientID && serverAddress)
 	{
-		app.showSpinner()
 		var serverURL = serverAddress + '/connect-with-client-id/' + clientID
 		window.location.assign(serverURL)
 	}

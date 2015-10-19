@@ -26,6 +26,13 @@ body {
 	font-size: 7.5vw;
 }
 
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 /* Add a top margin to the content corresponding to the height of the header. */
 body::before,
 section::before {
