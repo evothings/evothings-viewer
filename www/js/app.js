@@ -119,11 +119,11 @@ app.setConnectButtonColor = function()
 	if (value.length < 1)
 	{
 		$('#button-connect').removeClass('stone')
-		$('#button-connect').addClass('jetblack')
+		$('#button-connect').addClass('charcoal')
 	}
 	else
 	{
-		$('#button-connect').removeClass('jetblack')
+		$('#button-connect').removeClass('charcoal')
 		$('#button-connect').addClass('stone')
 	}
 }
@@ -301,6 +301,9 @@ app.saveServerAddress = function(address)
 {
 	// Save the server address.
 	sessionStorage.setItem('server-address', address)
+
+	// Clear the saved Workbench session address.
+	localStorage.removeItem('session-server-address')
 
 	// Reload the add-on script after change of server address.
 	app.loadAddOnScript(function()
