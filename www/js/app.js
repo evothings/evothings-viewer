@@ -1,6 +1,7 @@
 // Application code for the Evothings Viewer app.
 
 // Debug logging used when developing the app in Evothings Studio.
+
 /*
 if (window.hyper && window.hyper.log)
 {
@@ -17,26 +18,35 @@ app.defaultServerAddress = 'https://deploy.evothings.com'
 
 app.initialize = function()
 {
-	app.hideSpinner()
+	//console.log('app.initialize')
 
-	$('#menuitem-main').on('click', app.showMain)
-	$('#menuitem-info').on('click', app.showInfo)
-	$('#menuitem-settings').on('click', app.showSettings)
-	$('#button-connect').on('click', app.onConnectButton)
-	$('#input-connect-key').on('input', app.setConnectButtonColor)
-
-	// We call onDeviceReady ourselves instead of using Cordova event.
-	//document.addEventListener('deviceready', app.onDeviceReady, false)
-
-	$(function()
+	// Called when going back to page using the back button.
+	$(window).on('pageshow', function(event)
 	{
-		FastClick.attach(document.body)
+		//console.log('pageshow')
 
+		app.setConnectButtonColor()
 		app.setServerAddressField()
 
-		// When script has finished loading we call onDeviceReady.
 		app.loadAddOnScript(
-			app.onDeviceReady)
+			function()
+			{
+				app.showQuickConnectUI()
+			})
+	})
+
+	// Not called when going back to page using the back button.
+	$(function()
+	{
+		//console.log('page loaded')
+
+		$('#menuitem-main').on('click', app.showMain)
+		$('#menuitem-info').on('click', app.showInfo)
+		$('#menuitem-settings').on('click', app.showSettings)
+		$('#button-connect').on('click', app.onConnectButton)
+		$('#input-connect-key').on('input', app.setConnectButtonColor)
+
+		FastClick.attach(document.body)
 	})
 }
 
@@ -46,27 +56,21 @@ app.loadAddOnScript = function(loadedCallback)
 	evothings.loadScript(url, loadedCallback)
 }
 
-app.onDeviceReady = function()
+app.showQuickConnectUI = function()
 {
-	app.displayQuickConnectUI()
-}
+	// First hide the quick-connect UI.
+	$('#quick-connect-ui').html('')
 
-app.displayQuickConnectUI = function()
-{
-	// Display login/logout buttons if there is a saved client id.
+	// Only show login/logout buttons if there is a saved client id.
 	var clientID = app.getClientID()
 	if (!clientID)
 	{
-		$('#quick-connect-ui').html('')
 		return
 	}
 
 	var serverAddress = app.getSessionServerAddress()
 	if (serverAddress)
 	{
-		//app.showMessage('Checking login status...')
-		app.showSpinner()
-
 		// Ask server for user name.
 		var requestURL = serverAddress + '/get-info-for-client-id/' + clientID
 
@@ -79,28 +83,21 @@ app.displayQuickConnectUI = function()
 		// Process response.
 		request.done(function(data)
 		{
-			app.hideSpinner()
-
-			// For debugging.
-			// TODO: Remove.
-			//app.showMessage('Last logged in user: ' + data.userName)
-
 			if (data.isValid)
 			{
 				// We got a logged in user. Display login/logout buttons.
-				app.displayButtons(data.userName)
+				app.showQuickConnectButtons(data.userName)
 			}
 		})
 
 		request.fail(function(jqxhr)
 		{
-			app.showMessage('Could not connect to server. Please check your Internet connection and try again.')
-			app.hideSpinner()
+			app.showMessage('Could not get user info from server. Please check your Internet connection.')
 		})
 	}
 }
 
-app.displayButtons = function(userName)
+app.showQuickConnectButtons = function(userName)
 {
 	var html =
 		'<style>button { font-size:50%; width:100%; }</style>' +
@@ -142,6 +139,7 @@ app.onConnectButton = function()
 	{
 		// Open the URL.
 		window.location.assign(keyOrURL)
+		app.hideSpinner()
 	}
 	else
 	{
@@ -162,7 +160,6 @@ app.onLoginButton = function()
 	}
 	else
 	{
-		app.hideSpinner()
 		app.showMessage('Could not connect to the last active session, please connect with a new connect key.')
 	}
 }
@@ -269,6 +266,7 @@ app.validateConnectKeyAndConnect = function(key, serverAddress)
 			// Connect.
 			var serverURL = serverAddress + '/connect-with-client-id/' + data.clientID
 			window.location.assign(serverURL)
+			app.hideSpinner()
 		}
 		else
 		{
@@ -308,9 +306,6 @@ app.saveServerAddress = function(address)
 	// Reload the add-on script after change of server address.
 	app.loadAddOnScript(function()
 	{
-		// Call onDeviceReady.
-		app.onDeviceReady()
-
 		// Go back to the main screen.
 		app.showMain()
 	})
