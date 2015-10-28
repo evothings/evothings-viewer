@@ -30,6 +30,12 @@
 		<config-file target="*-Info.plist" parent="UIRequiresFullScreen">
 			<true/>
 		</config-file>
+		<config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+			<dict>
+				<key>NSAllowsArbitraryLoads</key>
+				<true/>
+			</dict>
+		</config-file>
 		<config-file target="*-Info.plist" parent="CFBundleURLTypes">
 			<array>
 				<dict>
