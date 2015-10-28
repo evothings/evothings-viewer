@@ -27,6 +27,9 @@
 		<config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
 			<false/>
 		</config-file>
+		<config-file target="*-Info.plist" parent="UIRequiresFullScreen">
+			<true/>
+		</config-file>
 		<config-file target="*-Info.plist" parent="CFBundleURLTypes">
 			<array>
 				<dict>
