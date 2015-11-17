@@ -43,6 +43,8 @@
 		  "location": "https://github.com/evothings/phonegap-estimotebeacons" },
 		{ "id": "com.evothings.evothingsviewer.config-plugin",
 		  "location": "config/config-plugin" },
+		{ "id": "com.synconset.cordovaHTTP",
+		  "location": "https://github.com/wymsee/cordova-HTTP" },
 		{ "id": "de.appplant.cordova.plugin.local-notification",
 		  "location": "https://github.com/evothings/cordova-plugin-local-notifications#evothings-master" }
 	]
