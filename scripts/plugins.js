@@ -14,6 +14,13 @@ function addPlugins()
 			var location = plugin.location || plugin.id
 			UTIL.execute('cordova plugin add ' + location)
 		}
+		if (!pluginExists(plugin))
+		{
+			console.log("Plugin "+plugin.id+" was not properly added!")
+			console.log("Likely cause: our ID does not match remote location's ID.")
+			console.log("You should correct the entry in our package.json.")
+			throw "PluginAddError"
+		}
 	})
 }
 
