@@ -1,0 +1,68 @@
+This is a guide to the Evothings Client Cache system.
+It is intended to be read by those who would implement its client-native parts.
+
+
+On recieveing the socket.io message 'client.cache', a URL on the form "evocacheadd://..." will be loaded, where "..." is another URL.
+
+The native side of the Viewer must handle this URL in the following manner:
+
+First, remove the 'evocacheadd:' part.
+
+The URL then refers to a JSON file with these members:
+{
+	name: string,
+	startPage: string,
+	files: [strings],
+}
+'name' is the human-friendly name of the app. It is also the app's unique identifier in the cache system.
+'startPage' is the name of the HTML file that is the app's entrypoint.
+'files' is an array of partial paths; all the files that are part of the app.
+
+Each file will be available on an url on this form: baseUrl + path.
+path is the file's path.
+baseUrl is the URL recieved with 'client.cache', with the ending past the last slash ('/') removed.
+
+For example, if the 'client.cache' URL is "evocacheadd://https://deploy.evothings.com/workbench/123567890/evocache-manifest.json" and the startPage is "index.html",
+the file will be available at "https://deploy.evothings.com/workbench/123567890/index.html".
+
+Paths may have subdirectories, which work straightforwardly.
+For example, a path of "css/index.css" will result in this URL: "https://deploy.evothings.com/workbench/123567890/css/index.css".
+
+
+To cache an app, all 'files' must be downloaded and stored, together with the manifest.
+No two apps may have the same 'name'. A cache request that refers to an already cached app will result in the previous app being overwritten.
+This restriction exists also in the Workbench.
+
+The details of storing files are left as an exercise for the reader.
+However, it is recommended that a small identifier, like a monotonically increasing integer, be assigned to each cached app.
+This will facilitate serving them to the webview.
+
+
+The Viewer's javascript may request various "evocachemeta:" URLs.
+The native side must ensure that the active webview page during these requests is the app's start page.
+No other page may access these URLs.
+
+The Viewer's javascript will request the URL "evocachemeta:app-list.json".
+The response shall have this form:
+{
+	'apps': {
+		<name>: {
+			'url': <string>,
+			'index': <string>,
+		},
+		...
+	},
+}
+
+The name of an app may contain spaces and other weird characters, and is therefore not suitable for filenames or URLs.
+It is, however, the app's unique identifier, and must therefore be the key in the "apps" table.
+
+The 'url' will be a "file://" URL where the app can be accessed.
+The 'index' can be used in a URL like this: "evocachemeta:delete/index", which, when set as window.location, will delete the specified cached app.
+
+When a cached app is loaded, requests [to load files in directories that are not direct decendants of the directory in which the cached app resides] must be denied.
+Otherwise, a hostile app could read sensitive files.
+
+
+An example implementation for Android is available in this branch.
+The workbench counterpart is available in evothings-studio, branch "cache2".
