@@ -47,8 +47,186 @@ app.initialize = function()
 		$('#input-connect-key').on('input', app.setConnectButtonColor)
 
 		FastClick.attach(document.body)
+
+		app.showCachedApps()
 	})
 }
+
+//*************************** CLIENT CACHE CODE START *************************
+
+app.showCachedApps = function()
+{
+	$('#hyper-cache-message').html("Fetching cache list...")
+	$.ajax("evocachemeta:app-list.json")
+	.done(function(data, textStatus, xhr)
+	{
+		//console.log(JSON.stringify(data))
+		var cachedApps = data["apps"]
+
+		if (!cachedApps)
+		{
+			var msg = 'No apps cached.'
+			$('#hyper-cache-message').html(msg)
+		}
+		else if(Object.keys(cachedApps).length == 0)
+		{
+			var msg = Object.keys(cachedApps).length+' apps cached.'
+			$('#hyper-cache-message').html(msg)
+		}
+		else
+		{
+			var list = ''
+			var count = 0
+			for(var appName in cachedApps)
+			{
+				var cachedApp = cachedApps[appName]
+				list +=
+					'<a href="'+cachedApp.url+'"><li class="arrow" id="ca'+count+'">' +
+					'<strong>'+appName+'</strong>' +
+					'</li></a>'
+				count += 1
+			}
+			$('#hyper-cache-list').html(list)
+			$('#hyper-cache-message').html("")
+			count = 0
+			for(var appName in cachedApps)
+			{
+				var cachedApp = cachedApps[appName];
+				// wrap variables in function to avoid for-loop madness.
+				(function(_appName, _cachedApp, _count)
+				{
+					// longpress pops up a menu with DELETE <todo: and some other (info) choices>.
+					app.longPress('ca'+_count, function() { app.showCachedAppMenu(_appName, _cachedApp); });
+				})(appName, cachedApp, count);
+				count += 1
+			}
+		}
+	})
+	.fail(function(xhr, textStatus, errorThrown)
+	{
+		$('#hyper-cache-nessage').html("ajax fail")
+		var msg = "$.ajax.fail2("+textStatus+", "+errorThrown+")"
+		console.log(msg)
+	})
+	app.longPress('hyper-cache-title', function() {})
+}
+
+app.createMenu = function()
+{
+	var bg = document.createElement('div')
+	bg.id = 'hyper-cached-app-background'
+	bg.style.width = '100%'
+	bg.style.height = '100%'
+	bg.style.left = '0'
+	bg.style.top = '0'
+	bg.style.position = 'absolute'
+	bg.style.background = 'rgba(0,0,0,0.5)'
+	bg.style.visibility = 'visible'
+	bg.style.zIndex = '999998'
+
+	// remove the menu if you click on the background.
+	bg.addEventListener('click', function()
+	{
+		document.body.removeChild(bg)
+	})
+
+	// create the menu itself
+	var menu = document.createElement('div')
+
+	menu.id = 'hyper-cached-app-menu'
+	menu.style.width = '80%'
+	menu.style.position = 'absolute'
+	menu.style.left = '5%'
+	menu.style.bottom = '40%'
+	menu.style.padding = '5% 5%'
+	menu.style.borderRadius = '4%'
+	menu.style.MozBorderRadius = '4%'
+	menu.style.WebkitBorderRadius = '4%'
+	menu.style.background = '#FFFFFF'
+	menu.style.opacity = '1'
+	menu.style.border = '1px solid #000000'
+	menu.style.fontFamily = 'sans-serif'
+	menu.style.fontSize = '18pt'
+	menu.style.fontWeight = 'bold'
+	menu.style.color = '#000000'
+	menu.style.textAlign = 'center'
+	menu.style.visibility = 'visible'
+	menu.style.zIndex = '999999'
+
+	bg.appendChild(menu)
+	document.body.appendChild(bg)
+
+	return menu
+}
+
+app.createMenuItem = function(data)
+{
+	var item = document.createElement('div')
+	item.innerHTML = data.text
+	// we want the background to be removed here, but its own click handler will take care of that.
+	item.addEventListener('click', data.action)
+	return item
+}
+
+// pop up a yes/cancel dialog box. call yesFunction if the user clicks "yes".
+app.yesOrCancel = function(questionText, yesFunction)
+{
+	return function()
+	{
+		var resultCallback = function(buttonIndex)
+		{
+			if(buttonIndex == 1)
+				yesFunction()
+		}
+		navigator.notification.confirm(questionText, resultCallback)
+	}
+}
+
+app.showCachedAppMenu = function(appName, cachedApp)
+{
+	var menuItems =
+	[
+		{
+			text: 'DELETE',
+			action: app.yesOrCancel("Delete "+appName+"?", function() { window.location.replace('evocachemeta:delete/'+cachedApp.index); }),
+		},
+	]
+
+	var menu = app.createMenu()
+
+	for(var i in menuItems)
+	{
+		var item = app.createMenuItem(menuItems[i])
+		menu.appendChild(item)
+	}
+}
+
+app.longPress = function(id, callback)
+{
+	var pressTimer
+	var el = document.getElementById(id)
+
+	el.addEventListener('touchend', function()
+	{
+		el.style.backgroundColor = "#f3f3f3"
+		clearTimeout(pressTimer)
+		// Clear timeout
+		return false;
+	})
+	el.addEventListener('touchstart', function()
+	{
+		el.style.backgroundColor = "#656565"
+		// Set timeout
+		pressTimer = window.setTimeout(function()
+		{
+			el.style.backgroundColor = "#f3f3f3"
+			callback()
+		}, 1000)
+		return false;
+	})
+}
+
+//*************************** CLIENT CACHE CODE END *************************
 
 app.loadAddOnScript = function(loadedCallback)
 {

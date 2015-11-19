@@ -436,8 +436,9 @@ public class MainActivity extends CordovaActivity
 				list = new JSONObject();
 
 			// Load the manifest.
-			String manifestUrl = "http" + url.substring("evocacheadd".length());
-			URL manifestURL = new URL(manifestUrl);
+			String manifestPath = url.substring("evocacheadd:".length());
+			URL manifestURL = new URL(new URL(mLoadedPage), manifestPath);
+			String manifestUrl = manifestURL.toString();
 			String baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf("/")+1);
 			JSONObject manifest = new JSONObject(utf8StreamToString(manifestURL.openConnection().getInputStream()));
 			String appName = manifest.getString("name");
