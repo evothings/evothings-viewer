@@ -1,15 +1,5 @@
 // Application code for the Evothings Viewer app.
 
-// Debug logging used when developing the app in Evothings Studio.
-
-/*
-if (window.hyper && window.hyper.log)
-{
-	console.log = hyper.log
-	console.error = hyper.log
-}
-*/
-
 // Application object.
 var app = {}
 
@@ -18,13 +8,10 @@ app.defaultServerAddress = 'https://deploy.evothings.com'
 
 app.initialize = function()
 {
-	//console.log('app.initialize')
-
-	// Called when going back to page using the back button.
+	// Called on page load and when going back to page using the back button.
 	$(window).on('pageshow', function(event)
 	{
-		//console.log('pageshow')
-
+		app.setConnectFieldText()
 		app.setConnectButtonColor()
 		app.setServerAddressField()
 
@@ -38,22 +25,34 @@ app.initialize = function()
 	// Not called when going back to page using the back button.
 	$(function()
 	{
-		//console.log('page loaded')
-
 		$('#menuitem-main').on('click', app.showMain)
 		$('#menuitem-info').on('click', app.showInfo)
 		$('#menuitem-settings').on('click', app.showSettings)
 		$('#button-connect').on('click', app.onConnectButton)
 		$('#input-connect-key').on('input', app.setConnectButtonColor)
-
-		FastClick.attach(document.body)
 	})
 }
 
 app.loadAddOnScript = function(loadedCallback)
 {
-	var url = app.getServerAddress() + '/server-www/static/evothings-viewer-addons.js'
-	evothings.loadScript(url, loadedCallback)
+	var tryToLoadScriptTimeout = 2000
+
+	function errorCallback()
+	{
+		// Script could not load. Try loading it again in a while.
+		setTimeout(
+			function()
+			{
+				app.loadAddOnScript(loadedCallback, errorCallback)
+			},
+			tryToLoadScriptTimeout)
+	}
+
+	// Load the script.
+	var url = app.getServerAddress() +
+		'/server-www/static/evothings-viewer-addon-1.2.0.js'
+	url = 'https://evothings.com/uploads/evothings2/beta3/evothings-viewer-addon-1.2.0.js'
+	evothings.loadScript(url, loadedCallback, errorCallback)
 }
 
 app.showQuickConnectUI = function()
@@ -110,6 +109,19 @@ app.showQuickConnectButtons = function(userName)
 	$('#quick-connect-ui').html(html)
 }
 
+app.setConnectFieldText = function()
+{
+	// Empty the field and set a placeholder text.
+	$('#input-connect-key').val('').attr('placeholder', 'Enter connect key')
+
+	// If there is a saved URL display it.
+	var savedURL = localStorage.getItem('saved-url')
+	if (savedURL)
+	{
+		$('#input-connect-key').val(savedURL)
+	}
+}
+
 app.setConnectButtonColor = function()
 {
 	var value = $('#input-connect-key').val().trim()
@@ -133,19 +145,53 @@ app.onConnectButton = function()
 	// Get contents of url text field.
 	var keyOrURL = $('#input-connect-key').val().trim()
 
-	// Does it look like a URL?
-	if ((0 == keyOrURL.indexOf('http://')) ||
-		(0 == keyOrURL.indexOf('https://')))
+	// Is it a URL?
+	if (app.checkIfURL(keyOrURL))
 	{
+		// Add protocol if not present.
+		var url = app.addURLProtocolIfMissing(keyOrURL)
+
+		// Save URL.
+		localStorage.setItem('saved-url', url)
+
 		// Open the URL.
-		window.location.assign(keyOrURL)
+		window.location.assign(url)
+
 		app.hideSpinner()
 	}
 	else
 	{
-		// Not a URL, assuming a connect code.
+		// Not a URL, assuming a connect code. Clear saved URL.
+		localStorage.removeItem('saved-url')
+
 		// Check if the code exists and connect to the server if ok.
 		app.getServerForConnectKey(keyOrURL)
+	}
+}
+
+app.checkIfURL = function(url)
+{
+	// Does the string start with a valid URL protocol
+	// or contain dots? Then it is assumed to be a URL.
+	return (
+		(0 == url.indexOf('http://')) ||
+		(0 == url.indexOf('https://')) ||
+		(0 < url.indexOf('.'))
+	)
+}
+
+app.addURLProtocolIfMissing = function(url)
+{
+	// If there is no protocol in the URL we add http://
+	if ((-1 == url.indexOf('http://')) &&
+		(-1 == url.indexOf('https://')))
+	{
+		return 'http://' + url
+	}
+	else
+	{
+		// Protocol already present.
+		return url
 	}
 }
 
