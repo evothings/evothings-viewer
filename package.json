@@ -39,6 +39,8 @@
 		  "location": "https://github.com/don/BluetoothSerial" },
 		{ "id": "cordova-plugin-ble",
 		  "location": "https://github.com/evothings/cordova-ble" },
+		{ "id": "cordova-plugin-eddystone",
+		  "location": "https://github.com/evothings/cordova-eddystone" },
 		{ "id": "cordova-plugin-estimote",
 		  "location": "https://github.com/evothings/phonegap-estimotebeacons" },
 		{ "id": "com.evothings.evothingsviewer.config-plugin",
