@@ -9,6 +9,9 @@ module.exports = function(context)
 	// Insert version info into target index.html.
 	UTIL.insertVersionInfo(context, './platforms/android/assets/www/index.html')
 
+	// Insert version info into target app.js.
+	UTIL.insertVersionInfo(context, './platforms/android/assets/www/js/app.js')
+
 	// Copy files.
 	UTIL.copyFileUTF8(
 		'./config/native/android/src/com/evothings/evothingsviewer/MainActivity.java',

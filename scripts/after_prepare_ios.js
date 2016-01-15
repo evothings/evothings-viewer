@@ -9,6 +9,9 @@ module.exports = function(context)
 	// Insert version info into target index.html.
 	UTIL.insertVersionInfo(context, './platforms/ios/www/index.html')
 
+	// Insert version info into target app.js.
+	UTIL.insertVersionInfo(context, './platforms/ios/www/js/app.js')
+
 	var name = UTIL.getAppName(context)
 	console.log('@@@ name: '+name)
 
