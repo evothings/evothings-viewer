@@ -105,7 +105,7 @@ app.showQuickConnectButtons = function(userName)
 		'<style>button { font-size:50%; width:100%; }</style>' +
 		'<button id="button-connect" ' +
 			'onclick="app.onLoginButton()" class="green">' +
-			'Connect as<br/>' +  userName + '</button><br/>' +
+			'Connect to<br/>' +  userName + '</button><br/>' +
 		'<button id="button-connect" ' +
 			'onclick="app.onLogoutButton()" class="red">' +
 			'Logout<br/>' +  userName + '</button><br/>'
