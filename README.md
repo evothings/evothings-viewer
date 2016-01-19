@@ -1,27 +1,33 @@
 ## Evothings Viewer
 
+### Notice when building from source
+
+Branch master contains updates not yet compatible with current production servers. When building a custom Evothings Viewer app from source, please use [the latest release](https://github.com/evothings/evothings-viewer/releases).
+
 ### Introduction
 
-This is the companion app to [Evothings Studio 2.0](https://github.com/evothings/evothings-studio/tree/evothings2) (note that the code for Evothings Studio 2.0 is in branch "evothings2").
+Evothings Viewer is the companion app for [Evothings Studio 2.0](https://github.com/evothings/evothings-studio/). It is used to connect to Evothings Workbench.
 
-The app consists of a Cordova WebView, a number of useful plugins, and a UI to connect to Evothings Studio Workbench.
+The app consists of a Cordova WebView, a number of useful plugins, and a UI to connect to Evothings Studio Workbench. You can edit the list of plugins in file package.json and build your custom version of the Viewer.
+
+Evothings Viewer should not be confused with Evothings Client, which is the companion app for Evothings Studio 1.2. Evothings Viewer is used with the most recent Evothings Studio version (currently 2.0).
 
 ### Building the App
 
 To build the app, you need Apache Cordova installed. Here are the build steps:
 
-Clone this repository:
+Download and unpack the source for the latest release:
 
-    git clone git@github.com:evothings/evothings-viewer.git
+    https://github.com/evothings/evothings-viewer/releases
 
-Go to the repository directory:
+Go to the downloaded and unpacked source directory:
 
     cd evothings-viewer
 
 Add your platforms:
 
-    cordova add android
-    cordova add ios
+    cordova platform add android
+    cordova platform add ios
 
 Then build using Cordova, this will add plugins first time you build either of:
 
