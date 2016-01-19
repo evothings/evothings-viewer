@@ -29,16 +29,20 @@ Add your platforms:
     cordova platform add android
     cordova platform add ios
 
-Then build using Cordova, this will add plugins first time you build either of:
+Then build using Cordova:
 
     cordova build android
     cordova build ios
 
-You can edit package.json to configure which plugins you wish to be included.
+Plugins will be added automatically first time you add a platform.
+
+You can edit [package.json](package.json) to configure which plugins you wish to be included. New plugins are added on next build.
 
 To clean up the project run (removes platforms and plugins):
 
     node scripts/clean.js
+
+You should do clean after having removed plugins from package.json.
 
 ### Build system overview
 
@@ -57,6 +61,18 @@ To clean the project use the command:
     node scripts/clean.js
 
 This removes projects and plugins. Add platforms using "cordova platform add ...". Plugins are added when the project is built for the first time.
+
+### Setting a custom package name
+
+Change the package name in config.xml on this line:
+
+    <widget id="com.evothings.evothingsviewer"
+
+For Android, update this line in MainActivity.java to use your package name:
+
+    package com.evothings.evothingsviewer;
+
+Build for iOS not yet tested with custom package name.
 
 ### Known Xcode build issues
 
