@@ -16,7 +16,6 @@
     <content src="index.html" />
     <access origin="*" />
 
-    <preference name="Fullscreen" value="true" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="BackgroundColor" value="0xffffffff"/>
@@ -26,6 +25,14 @@
 	<preference name="AndroidLaunchMode" value="singleTask" />
 	<preference name="BackupWebStorage" value="local" />
 	<preference name="android-minSdkVersion" value="14" />
+
+	<platform name="android">
+		<preference name="Fullscreen" value="false" />
+	</platform>
+
+	<platform name="ios">
+		<preference name="Fullscreen" value="true" />
+	</platform>
 
 	<hook type="before_prepare" src="scripts/before_prepare.js" />
 
