@@ -17,6 +17,18 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 			</intent-filter>
+			<intent-filter>
+				<data android:scheme="evo" />
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+			</intent-filter>
+			<intent-filter>
+				<data android:scheme="evos" />
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+			</intent-filter>
 		</config-file>
 	</platform>
 
@@ -42,6 +54,8 @@
 					<key>CFBundleURLSchemes</key>
 					<array>
 						<string>evothings</string>
+						<string>evo</string>
+						<string>evos</string>
 					</array>
 				</dict>
 			</array>

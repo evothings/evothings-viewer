@@ -88,39 +88,52 @@ public class MainActivity extends CordovaActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		if (isEvothingsIntent(intent))
-		{
-			openEvothingsIntent(intent);
-		}
-		else
+		if (!openEvothingsIntent(intent))
 		{
 			super.onNewIntent(intent);
 		}
 	}
 
-	protected boolean isEvothingsIntent(Intent intent)
+	protected boolean openEvothingsIntent(Intent intent)
 	{
+		String targetURL = null;
+
+		// Get the URL string of the intent.
 		String url = intent.getDataString();
-		if (null != url)
+		if (null == url)
 		{
-			return url.startsWith("evothings:");
+			return false;
+		}
+
+		if (url.startsWith("evothings:"))
+		{
+			// Strip off "evothings" from the URL and replace with "http".
+			targetURL = "http" + url.substring(9);
+		}
+		else
+		if (url.startsWith("evo:"))
+		{
+			// Strip off "evo" from the URL and replace with "http".
+			targetURL = "http" + url.substring(3);
+		}
+		else
+		if (url.startsWith("evos:"))
+		{
+			// Strip off "evos" from the URL and replace with "https".
+			targetURL = "https" + url.substring(4);
+		}
+
+		if (null != targetURL)
+		{
+			// Load the target URL in the Cordova web view.
+			this.appView.loadUrlIntoView(targetURL, true);
+
+			return true;
 		}
 		else
 		{
 			return false;
 		}
-	}
-
-	protected void openEvothingsIntent(Intent intent)
-	{
-		// Get the URL string of the intent.
-		String url = intent.getDataString();
-
-		// Strip off "evothings" from the URL and replace with "http".
-		url = "http" + url.substring(9);
-
-		// Load the URL in the Cordova web view.
-		this.appView.loadUrlIntoView(url, true);
 	}
 
 /*
