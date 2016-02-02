@@ -34,20 +34,18 @@
 		{ "id": "cordova-plugin-chrome-apps-sockets-tcpserver" },
 		{ "id": "cordova-plugin-chrome-apps-sockets-udp" },
 		{ "id": "com.unarin.cordova.beacon",
-		  "location": "https://github.com/evothings/cordova-plugin-ibeacon" },
+		  "location": "https://github.com/evothings/cordova-plugin-ibeacon#3.3.2" },
 		{ "id": "cordova-plugin-bluetooth-serial",
 		  "location": "https://github.com/don/BluetoothSerial" },
 		{ "id": "cordova-plugin-ble",
-		  "location": "https://github.com/evothings/cordova-ble" },
-		{ "id": "cordova-plugin-eddystone",
-		  "location": "https://github.com/evothings/cordova-eddystone" },
+		  "location": "https://github.com/evothings/cordova-ble#v1.0.1" },
 		{ "id": "cordova-plugin-estimote",
 		  "location": "https://github.com/evothings/phonegap-estimotebeacons" },
-		{ "id": "com.evothings.evothingsviewer.config-plugin",
-		  "location": "config/config-plugin" },
 		{ "id": "com.synconset.cordovaHTTP",
-		  "location": "https://github.com/evothings/cordova-HTTP" },
+		  "location": "https://github.com/evothings/cordova-HTTP#v0.2.1" },
 		{ "id": "de.appplant.cordova.plugin.local-notification",
-		  "location": "https://github.com/evothings/cordova-plugin-local-notifications#evothings-master" }
+		  "location": "https://github.com/katzer/cordova-plugin-local-notifications#0.8.4" },
+		{ "id": "com.evothings.evothingsviewer.config-plugin",
+		  "location": "config/config-plugin" }
 	]
 }
