@@ -17,12 +17,8 @@ app.initialize = function()
 		app.setConnectFieldText()
 		app.setConnectButtonColor()
 		app.setServerAddressField()
-
-		app.loadAddOnScript(
-			function()
-			{
-				app.showQuickConnectUI()
-			})
+		app.showQuickConnectUI()
+		app.loadAddOnScript()
 	})
 
 	// Not called when going back to page using the back button.
@@ -36,9 +32,21 @@ app.initialize = function()
 	})
 }
 
-app.loadAddOnScript = function(loadedCallback)
+app.loadAddOnScript = function()
 {
-	var tryToLoadScriptTimeout = 2000
+	var tryToLoadAgainTimeout = 1500
+
+	// URL for the add-on script.
+	var url =
+		app.getServerAddress() +
+		'/server-www/static/evothings-viewer-addon-' +
+		app.viewerVersion +
+		'.js'
+
+	function loadScript(loadedCallback, errorCallback)
+	{
+		evothings.loadScript(url, loadedCallback, errorCallback)
+	}
 
 	function errorCallback()
 	{
@@ -48,14 +56,17 @@ app.loadAddOnScript = function(loadedCallback)
 			{
 				app.loadAddOnScript(loadedCallback, errorCallback)
 			},
-			tryToLoadScriptTimeout)
+			tryToLoadAgainTimeout)
 	}
 
-	// Load the script.
-	var url = app.getServerAddress() +
-		'/server-www/static/evothings-viewer-addon-1.2.0.js'
-	url = 'https://evothings.com/uploads/evothings2/beta3/evothings-viewer-addon-1.2.0.js'
-	evothings.loadScript(url, loadedCallback, errorCallback)
+	function loadedCallback()
+	{
+		// Empty.
+	}
+
+	// Initial load.
+	loadScript(loadedCallback, errorCallback)
+
 }
 
 app.showQuickConnectUI = function()
@@ -391,12 +402,8 @@ app.saveServerAddress = function(address)
 	// Clear the saved Workbench session address.
 	localStorage.removeItem('session-server-address')
 
-	// Reload the add-on script after change of server address.
-	app.loadAddOnScript(function()
-	{
-		// Go back to the main screen.
-		app.showMain()
-	})
+	// Go back to first screen.
+	app.showMain()
 }
 
 app.getServerAddress = function()
