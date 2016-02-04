@@ -72,12 +72,9 @@ public class MainActivity extends CordovaActivity
 
 		// If the intent has a data string we load it.
 		Intent intent = getIntent();
-		if (isEvothingsIntent(intent))
+		if (!openEvothingsIntent(intent))
 		{
-			openEvothingsIntent(intent);
-		}
-		else
-		{
+			// If the intent is not an evo/evos URL, open the start page.
 			// This is the original Cordova page loading code.
 			// Set by <content src="index.html" /> in config.xml
 			super.loadUrl(Config.getStartUrl());
