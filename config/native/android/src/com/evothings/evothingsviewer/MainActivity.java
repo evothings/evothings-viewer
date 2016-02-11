@@ -49,7 +49,7 @@ public class MainActivity extends CordovaActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		if(BuildConfig.DEBUG)
+		if (BuildConfig.DEBUG)
 		{
 			// Detect all manner of bad things.
 			// This code is active only in debug builds.
@@ -149,25 +149,41 @@ public class MainActivity extends CordovaActivity
 
 	// For Cordova 4.0+
 	@Override
-	protected CordovaWebViewEngine makeWebViewEngine() {
+	protected CordovaWebViewEngine makeWebViewEngine()
+	{
 		return new EvothingsWebViewEngine(this, preferences);
 	}
 
-	public class EvothingsWebViewEngine extends SystemWebViewEngine {
+	public class EvothingsWebViewEngine extends SystemWebViewEngine
+	{
 		private MainActivity mActivity;
 
-		public EvothingsWebViewEngine(MainActivity activity, CordovaPreferences preferences) {
+		public EvothingsWebViewEngine(
+			MainActivity activity,
+			CordovaPreferences preferences)
+		{
 			super(activity, preferences);
 			mActivity = activity;
 		}
 
 		@Override
-		public void init(CordovaWebView parentWebView, CordovaInterface cordova, CordovaWebViewEngine.Client client,
-			CordovaResourceApi resourceApi, PluginManager pluginManager,
+		public void init(
+			CordovaWebView parentWebView,
+			CordovaInterface cordova,
+			CordovaWebViewEngine.Client client,
+			CordovaResourceApi resourceApi,
+			PluginManager pluginManager,
 			NativeToJsMessageQueue nativeToJsMessageQueue)
 		{
 			webView.setWebViewClient(new EvothingsWebViewClient(mActivity, this));
-			super.init(parentWebView, cordova, client, resourceApi, pluginManager, nativeToJsMessageQueue);
+
+			super.init(
+				parentWebView,
+				cordova,
+				client,
+				resourceApi,
+				pluginManager,
+				nativeToJsMessageQueue);
 		}
 	}
 	// End Cordova 4.0+
@@ -180,10 +196,12 @@ public class MainActivity extends CordovaActivity
 
 		private MainActivity mActivity;
 
-		// Contains the URL of the currently loaded page, or null if no page has yet loaded.
+		// Contains the URL of the currently loaded page, or null if no page has
+		// yet loaded.
 		private String mLoadedPage;
 
-		public EvothingsWebViewClient(MainActivity activity, SystemWebViewEngine parentEngine)
+		public EvothingsWebViewClient(
+			MainActivity activity, SystemWebViewEngine parentEngine)
 		{
 			super(parentEngine);
 			mActivity = activity;
@@ -204,27 +222,43 @@ public class MainActivity extends CordovaActivity
 				url = "http" + url.substring(9);
 			}
 			// If we're running a cached app, limit access to the rest of the file system.
-			else if(mCachedApp != null && url.startsWith("file:"))
+			else if (mCachedApp != null && url.startsWith("file:"))
 			{
-				if(!url.startsWith(mCachedApp)) {
-					LOG.e("EvothingsWebViewClient", "evocache 404 ("+mCachedApp+", "+url+")");
-					return new WebResourceResponse("text/plain", "UTF-8", null);	// Results in a 404.
+				if (!url.startsWith(mCachedApp))
+				{
+					LOG.e("EvothingsWebViewClient",
+						"evocache 404 ("+mCachedApp+", "+url+")");
+					// Results in a 404.
+					return new WebResourceResponse("text/plain", "UTF-8", null);
 				}
 			}
-			// prevent origins that aren't our own start page from accessing these resources.
-			else if(url.startsWith("evocachemeta:"))
+			// Prevent origins that aren't our own start page from
+			// accessing these resources.
+			else if (url.startsWith("evocachemeta:"))
 			{
-				if(!ensureStartPage(url))
+				if (!ensureStartPage(url))
+				{
 					return null;
-				if(url.equals("evocachemeta:app-list.json")) {
+				}
+
+				if (url.equals("evocachemeta:app-list.json"))
+				{
 					LOG.e("EvothingsWebViewClient", "serving app-list.json...");
-					try {
-						return new WebResourceResponse("text/json", "UTF-8", new ByteArrayInputStream(generateClientsAppListJson()));
-					} catch(Exception e) {
+					try
+					{
+						return new WebResourceResponse(
+							"text/json",
+							"UTF-8",
+							new ByteArrayInputStream(generateClientsAppListJson()));
+					}
+					catch(Exception e)
+					{
 						e.printStackTrace();
 						// no need to do anything else here.
 					}
-				} else {
+				}
+				else
+				{
 					LOG.e("EvothingsWebViewClient", "evocachemeta unhandled: "+url);
 				}
 				// TODO: add a command for removing apps.
@@ -247,21 +281,21 @@ public class MainActivity extends CordovaActivity
 			}
 		}
 
-    @Override
-    public void onPageStarted(WebView view, String url, Bitmap favicon)
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon)
 		{
-			mLoadedPage = url;
-			super.onPageStarted(view, url, favicon);
+				mLoadedPage = url;
+				super.onPageStarted(view, url, favicon);
 		}
 
-		// returns true if the loaded page is the start page, false otherwise.
+		// Returns true if the loaded page is the start page, false otherwise.
 		private boolean ensureStartPage(String url)
 		{
-			if(mLoadedPage == null)
+			if (mLoadedPage == null)
 			{
 				LOG.e("EvothingsWebViewClient", "mLoadedPage null, "+url);
 			}
-			if(mLoadedPage.equals(Config.getStartUrl()))
+			if (mLoadedPage.equals(Config.getStartUrl()))
 			{
 				return true;
 			}
@@ -272,13 +306,15 @@ public class MainActivity extends CordovaActivity
 			return false;
 		}
 
-
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url)
 		{
 			LOG.i("EvothingsWebViewClient", "shouldOverrideUrlLoading "+url);
-			String cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE).toURI().toString();
+
+			String cacheRoot = mActivity.getDir("evocache",
+				MODE_PRIVATE).toURI().toString();
 			mCachedApp = null;
+
 			// Used by external apps to load things into Evothings Client.
 			if (url.startsWith("evothings:"))
 			{
@@ -288,10 +324,10 @@ public class MainActivity extends CordovaActivity
 				return true;	// we handled it.
 			}
 			// Load a cached app.
-			else if(url.startsWith(cacheRoot))
+			else if (url.startsWith(cacheRoot))
 			{
 				Uri uri = Uri.parse(url);
-				if(!uri.getHost().equals(uri.getAuthority()))
+				if (!uri.getHost().equals(uri.getAuthority()))
 				{
 					LOG.e("EvothingsWebViewClient", "evocache 400 ("+url+")");
 					return false;
@@ -302,18 +338,19 @@ public class MainActivity extends CordovaActivity
 				return false;	// shouldInterceptRequest will handle it.
 			}
 			// Cache a new app or update a cached app.
-			else if(url.startsWith("evocacheadd:"))
+			else if (url.startsWith("evocacheadd:"))
 			{
 				new EvoCacheAddThread(url).start();
 				return true;	// we'll handle it.
 			}
-			// prevent origins that aren't our own start page from accessing these resources.
-			else if(url.startsWith("evocachemeta:"))
+			// Prevent origins that aren't our own start page from accessing
+			// these resources.
+			else if (url.startsWith("evocachemeta:"))
 			{
-				if(!ensureStartPage(url))
+				if (!ensureStartPage(url))
 					return false;
 				String metaUrl = url.substring("evocachemeta:".length());
-				if(metaUrl.startsWith("delete/"))
+				if (metaUrl.startsWith("delete/"))
 				{
 					String deleteRequestAppIndex = metaUrl.substring("delete/".length());
 					new EvoCacheDeleteThread(deleteRequestAppIndex).start();
@@ -378,21 +415,36 @@ public class MainActivity extends CordovaActivity
 			}
 		}
 
-		void downloadCacheFile(File cacheRoot, String baseUrl, String appIndex, String url) throws Exception {
-			LOG.i("EvothingsWebViewClient", "downloadCacheFile("+cacheRoot.toString()+", "+baseUrl+", "+appIndex+", "+url+")");
-			// we got a file, let's download it.
+		void downloadCacheFile(
+			File cacheRoot,
+			String baseUrl,
+			String appIndex,
+			String url)
+			throws Exception
+		{
+			LOG.i("EvothingsWebViewClient",
+				"downloadCacheFile("+cacheRoot.toString()+", "+baseUrl+", "+
+				appIndex+", "+url+")");
+
+			// We got a file, let's download it.
 			int protocolIndex = url.indexOf("://");
-			if(protocolIndex != -1 || url.startsWith("//")) {
+			if (protocolIndex != -1 || url.startsWith("//"))
+			{
 				// absolute URL. TODO: try to read it as-is?
 				String msg = "evocacheadd bad manifest file ("+url+")";
 				LOG.e("EvothingsWebViewClient", msg);
 				throw new Exception(msg);
 			}
+
 			String fileUrl, filename;
-			if(url.startsWith("/")) {
+
+			if (url.startsWith("/"))
+			{
 				// non-relative URL. remove the prefix slash to make it usable.
 				filename = url.substring(1);
-			} else {
+			}
+			else
+			{
 				filename = url;
 			}
 			fileUrl = baseUrl + filename;
@@ -402,8 +454,10 @@ public class MainActivity extends CordovaActivity
 			File file = new File(cacheRoot, subPath);
 			File parent = file.getParentFile();
 			parent.mkdirs();
-			if(!parent.isDirectory()) {
-				String msg = "evocacheadd directory creation failed ("+url+", "+parent.toString()+")";
+			if (!parent.isDirectory())
+			{
+				String msg = "evocacheadd directory creation failed ("+url+
+					", "+parent.toString()+")";
 				LOG.e("EvothingsWebViewClient", msg);
 				throw new Exception(msg);
 			}
@@ -423,42 +477,56 @@ public class MainActivity extends CordovaActivity
 
 		// Thanks to Pavel Repin
 		// http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
-		String utf8StreamToString(java.io.InputStream is) throws IOException {
+		String utf8StreamToString(java.io.InputStream is) throws IOException
+		{
 			java.util.Scanner s = new java.util.Scanner(is, "UTF-8").useDelimiter("\\A");
 			String str = s.hasNext() ? s.next() : "";
 			is.close();
 			return str;
 		}
 
-		void evoCacheAdd(String url) throws Exception {
+		void evoCacheAdd(String url) throws Exception
+		{
 			// Load the app list.
 			JSONObject appList;
 			JSONObject list = null;
 			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
-			if(appListFile.exists()) {
-				appList = new JSONObject(utf8StreamToString(new FileInputStream(appListFile)));
+			if (appListFile.exists())
+			{
+				appList =
+					new JSONObject(
+						utf8StreamToString(new FileInputStream(appListFile)));
 				list = appList.optJSONObject("apps");
-			} else {
+			}
+			else
+			{
 				appList = new JSONObject();
 			}
-			if(list == null)
+
+			if (list == null)
+			{
 				list = new JSONObject();
+			}
 
 			// Load the manifest.
 			String manifestUrl = "http" + url.substring("evocacheadd".length());
 			URL manifestURL = new URL(manifestUrl);
 			String baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf("/")+1);
-			JSONObject manifest = new JSONObject(utf8StreamToString(manifestURL.openConnection().getInputStream()));
+			JSONObject manifest =
+				new JSONObject(
+					utf8StreamToString(manifestURL.openConnection().getInputStream()));
 			String appName = manifest.getString("name");
 			JSONArray files = manifest.getJSONArray("files");
 			String startPage = manifest.getString("startPage");
 			// todo: manifest.getString("startPage")
 
-			// Construct the app's list entry, or load it if this is a previously cached app.
+			// Construct the app's list entry, or load it if this is a
+			// previously cached app.
 			int appIndex = appList.optInt("count", 0);
 			JSONObject entry = list.optJSONObject(appName);
-			if(entry == null) {
+			if (entry == null)
+			 {
 				// App was not previously cached. Construct a new entry.
 				entry = new JSONObject();
 				appIndex++;
@@ -466,7 +534,9 @@ public class MainActivity extends CordovaActivity
 
 				// Update counter.
 				appList.put("count", appIndex);
-			} else {
+			}
+			else
+			{
 				// App was previously cached. Overwrite the existing entry.
 				// Reuse the cache directory.
 				appIndex = entry.getInt("index");
@@ -477,8 +547,12 @@ public class MainActivity extends CordovaActivity
 			// TODO: remove all files in app's cache directory.
 
 			// Download the app's files.
-			for(int i=0; i<files.length(); i++) {
-				downloadCacheFile(cacheRoot, baseUrl, Integer.toString(appIndex), files.getString(i));
+			for (int i=0; i<files.length(); i++)
+			{
+				downloadCacheFile(
+					cacheRoot, baseUrl,
+					Integer.toString(appIndex),
+					files.getString(i));
 			}
 
 			// Update entry.
@@ -487,11 +561,14 @@ public class MainActivity extends CordovaActivity
 			// Save the app list.
 			saveAppList(appList, list, appListFile);
 
-			// Load the original client start-page. It should display the updated app list.
+			// Load the original client start-page. It should display the
+			// updated app list.
 			appView.loadUrlIntoView(Config.getStartUrl(), true);
 		}
 
-		void saveAppList(JSONObject appList, JSONObject list, File appListFile) throws Exception {
+		void saveAppList(JSONObject appList, JSONObject list, File appListFile)
+			throws Exception
+		{
 			appList.put("apps", list);
 			FileOutputStream fos = new FileOutputStream(appListFile);
 			String appListString = appList.toString();
@@ -502,34 +579,46 @@ public class MainActivity extends CordovaActivity
 			LOG.i("EvothingsWebViewClient", "wrote app-list.json.");
 		}
 
-		void evoCacheDelete(String index) throws Exception {
+		void evoCacheDelete(String index) throws Exception
+		{
 			// Load the app list.
 			JSONObject appList;
 			JSONObject list = null;
 			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
-			if(appListFile.exists()) {
-				appList = new JSONObject(utf8StreamToString(new FileInputStream(appListFile)));
+			if (appListFile.exists())
+			{
+				appList = new JSONObject(utf8StreamToString(
+					new FileInputStream(appListFile)));
 				list = appList.optJSONObject("apps");
-			} else {
+			}
+			else
+			{
 				appList = new JSONObject();
 			}
-			if(list == null)
+
+			if (list == null)
+			{
 				list = new JSONObject();
+			}
 
 			// Get the entry of the app to be deleted
 			JSONObject entry = null;
 			String appName = null;
 			Iterator<String> keys = list.keys();
-			while(keys.hasNext()) {
+			while (keys.hasNext())
+			{
 				appName = keys.next();
 				JSONObject e = list.getJSONObject(appName);
-				if(index.equals(e.getString("index"))) {
+				if (index.equals(e.getString("index")))
+				{
 					entry = e;
 					break;
 				}
 			}
-			if(entry == null) {
+
+			if (entry == null)
+			{
 				throw new Exception("evocachedel: index not found ("+index+")");
 			}
 
@@ -545,38 +634,52 @@ public class MainActivity extends CordovaActivity
 			// Save the app list.
 			saveAppList(appList, list, appListFile);
 
-			// Load the original client start-page. It should display the updated app list.
+			// Load the original client start-page. It should display the
+			// updated app list.
 			appView.loadUrlIntoView(Config.getStartUrl(), true);
 		}
 
-		void rmRecursive(File f) throws IOException {
-			if(f.isDirectory()) {
-				for(File c : f.listFiles())
+		void rmRecursive(File f) throws IOException
+		{
+			if (f.isDirectory())
+			{
+				for (File c : f.listFiles())
+				{
 					rmRecursive(c);
+				}
 			}
-			if(!f.delete())
+			if (!f.delete())
+			{
 				throw new IOException("Failed to delete file: " + f);
+			}
 		}
 
 		// The client's app-list.json has a different format from the native one.
-		byte[] generateClientsAppListJson() throws Exception {
+		byte[] generateClientsAppListJson() throws Exception
+		{
 			// Load the app list.
 			JSONObject nativeList = null;
 			File cacheRoot = mActivity.getDir("evocache", MODE_PRIVATE);
 			File appListFile = new File(cacheRoot, "app-list.json");
-			if(appListFile.exists()) {
+
+			if (appListFile.exists())
+			{
 				String s = utf8StreamToString(new FileInputStream(appListFile));
 				LOG.i("EvothingsWebViewClient", s);
 				JSONObject appList = new JSONObject(s);
 				nativeList = appList.optJSONObject("apps");
 			}
-			if(nativeList == null)
+
+			if (nativeList == null)
+			{
 				nativeList = new JSONObject();
+			}
 
 			// Convert each app in the list to client format.
 			JSONObject clientList = new JSONObject();
 			Iterator<String> keys = nativeList.keys();
-			while(keys.hasNext()) {
+			while (keys.hasNext())
+			{
 				String name = keys.next();
 				JSONObject nativeApp = nativeList.getJSONObject(name);
 				String index = nativeApp.getString("index");
@@ -592,6 +695,7 @@ public class MainActivity extends CordovaActivity
 			JSONObject clientAppList = new JSONObject();
 			clientAppList.put("apps", clientList);
 			//LOG.i("EvothingsWebViewClient", clientAppList.toString());
+
 			return clientAppList.toString().getBytes("UTF-8");
 		}
 
@@ -648,23 +752,33 @@ public class MainActivity extends CordovaActivity
 			}
 			catch (IOException e)
 			{
-				LOG.e("EvothingsWebViewClient", "Error occurred while loading a file (returning a 404).", e);
+				LOG.e("EvothingsWebViewClient",
+					"Error occurred while loading a file (returning a 404).", e);
 				// Results in a 404.
 				return new WebResourceResponse("text/plain", "UTF-8", null);
 			}
 		}
 	}
 
-	private static void fastCopy(final InputStream src, final OutputStream dest) throws IOException {
+	private static void fastCopy(
+		final InputStream src,
+		final OutputStream dest)
+		throws IOException
+	{
 		final ReadableByteChannel inputChannel = Channels.newChannel(src);
 		final WritableByteChannel outputChannel = Channels.newChannel(dest);
 		fastCopy2(inputChannel, outputChannel);
 	}
 
-	private static void fastCopy2(final ReadableByteChannel src, final WritableByteChannel dest) throws IOException {
+	private static void fastCopy2(
+		final ReadableByteChannel src,
+		final WritableByteChannel dest)
+		throws IOException
+	{
 		final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
 
-		while(src.read(buffer) != -1) {
+		while (src.read(buffer) != -1)
+		{
 			buffer.flip();
 			dest.write(buffer);
 			buffer.compact();
@@ -672,7 +786,8 @@ public class MainActivity extends CordovaActivity
 
 		buffer.flip();
 
-		while(buffer.hasRemaining()) {
+		while (buffer.hasRemaining())
+		{
 			dest.write(buffer);
 		}
 	}
