@@ -207,22 +207,24 @@ public class MainActivity extends CordovaActivity
 			mActivity = activity;
 		}
 
+		/**
+		 * Called when fetching resources, return custom data or null for default
+		 * handling.
+		 */
 		@Override
 		public WebResourceResponse shouldInterceptRequest(WebView view, String url)
 		{
 			//LOG.i("EvothingsWebViewClient", "shouldInterceptRequest "+url);
+
+			// Check if this is a Cordova file being leader and handle accordingly.
 			String localURL = getCordovaLocalFileURL(url);
 			if (null != localURL)
 			{
 				return handleCordovaURL(view, Uri.parse(localURL), url);
 			}
-			else if (url.startsWith("evothings:"))
-			{
-				// Replace the 'evothings' protocol with 'http'.
-				url = "http" + url.substring(9);
-			}
+
 			// If we're running a cached app, limit access to the rest of the file system.
-			else if (mCachedApp != null && url.startsWith("file:"))
+			if (mCachedApp != null && url.startsWith("file:"))
 			{
 				if (!url.startsWith(mCachedApp))
 				{
@@ -232,9 +234,10 @@ public class MainActivity extends CordovaActivity
 					return new WebResourceResponse("text/plain", "UTF-8", null);
 				}
 			}
+
 			// Prevent origins that aren't our own start page from
 			// accessing these resources.
-			else if (url.startsWith("evocachemeta:"))
+			if (url.startsWith("evocachemeta:"))
 			{
 				if (!ensureStartPage(url))
 				{
@@ -251,7 +254,7 @@ public class MainActivity extends CordovaActivity
 							"UTF-8",
 							new ByteArrayInputStream(generateClientsAppListJson()));
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						e.printStackTrace();
 						// no need to do anything else here.
@@ -261,61 +264,31 @@ public class MainActivity extends CordovaActivity
 				{
 					LOG.e("EvothingsWebViewClient", "evocachemeta unhandled: "+url);
 				}
+
 				// TODO: add a command for removing apps.
 			}
 
 			return null;
 		}
 
-		private void createAppListJson(File file)
-		{
-			try
-			{
-				FileWriter w = new FileWriter(file);
-				w.write("{}");
-				w.close();
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon)
-		{
-				mLoadedPage = url;
-				super.onPageStarted(view, url, favicon);
-		}
-
-		// Returns true if the loaded page is the start page, false otherwise.
-		private boolean ensureStartPage(String url)
-		{
-			if (mLoadedPage == null)
-			{
-				LOG.e("EvothingsWebViewClient", "mLoadedPage null, "+url);
-			}
-			if (mLoadedPage.equals(Config.getStartUrl()))
-			{
-				return true;
-			}
-			else
-			{
-				LOG.e("EvothingsWebViewClient", "mLoadedPage "+mLoadedPage+", "+url);
-			}
-			return false;
-		}
-
+		/**
+		 * Called when loading a page, return true to load page ourselves
+		 * or false for default loading.
+		 */
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url)
 		{
 			LOG.i("EvothingsWebViewClient", "shouldOverrideUrlLoading "+url);
 
-			String cacheRoot = mActivity.getDir("evocache",
-				MODE_PRIVATE).toURI().toString();
+			String cacheRoot =
+				mActivity
+					.getDir("evocache", MODE_PRIVATE)
+					.toURI()
+					.toString();
+
 			mCachedApp = null;
 
-			// Used by external apps to load things into Evothings Client.
+			// Used by external apps to load things into Evothings Viewer.
 			if (url.startsWith("evothings:"))
 			{
 				// Replace the 'evothings' protocol with 'http'.
@@ -323,8 +296,27 @@ public class MainActivity extends CordovaActivity
 				appView.loadUrlIntoView(url, true);
 				return true;	// we handled it.
 			}
+
+			// Used by external apps to load things into Evothings Viewer.
+			if (url.startsWith("evo:"))
+			{
+				// Replace the 'evothings' protocol with 'http'.
+				url = "http" + url.substring(3);
+				appView.loadUrlIntoView(url, true);
+				return true;	// we handled it.
+			}
+
+			// Used by external apps to load things into Evothings Viewer.
+			if (url.startsWith("evos:"))
+			{
+				// Replace the 'evothings' protocol with 'http'.
+				url = "https" + url.substring(4);
+				appView.loadUrlIntoView(url, true);
+				return true;	// we handled it.
+			}
+
 			// Load a cached app.
-			else if (url.startsWith(cacheRoot))
+			if (url.startsWith(cacheRoot))
 			{
 				Uri uri = Uri.parse(url);
 				if (!uri.getHost().equals(uri.getAuthority()))
@@ -337,18 +329,23 @@ public class MainActivity extends CordovaActivity
 				LOG.e("EvothingsWebViewClient", "mCachedApp: "+mCachedApp);
 				return false;	// shouldInterceptRequest will handle it.
 			}
+
 			// Cache a new app or update a cached app.
-			else if (url.startsWith("evocacheadd:"))
+			if (url.startsWith("evocacheadd:"))
 			{
 				new EvoCacheAddThread(url).start();
 				return true;	// we'll handle it.
 			}
+
 			// Prevent origins that aren't our own start page from accessing
 			// these resources.
-			else if (url.startsWith("evocachemeta:"))
+			if (url.startsWith("evocachemeta:"))
 			{
 				if (!ensureStartPage(url))
+				{
 					return false;
+				}
+
 				String metaUrl = url.substring("evocachemeta:".length());
 				if (metaUrl.startsWith("delete/"))
 				{
@@ -356,14 +353,49 @@ public class MainActivity extends CordovaActivity
 					new EvoCacheDeleteThread(deleteRequestAppIndex).start();
 					return true;
 				}
-				else
-				{
-					return false;
-				}
+			}
+
+			return false;	// system handles it.
+		}
+
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon)
+		{
+				mLoadedPage = url;
+				super.onPageStarted(view, url, favicon);
+		}
+
+		private void createAppListJson(File file)
+		{
+			try
+			{
+				FileWriter w = new FileWriter(file);
+				w.write("{}");
+				w.close();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		// Returns true if the loaded page is the start page, false otherwise.
+		private boolean ensureStartPage(String url)
+		{
+			if (mLoadedPage == null)
+			{
+				LOG.e("EvothingsWebViewClient", "mLoadedPage null, "+url);
+				return false;
+			}
+
+			if (mLoadedPage.equals(Config.getStartUrl()))
+			{
+				return true;
 			}
 			else
 			{
-				return false;	// system handles it.
+				LOG.e("EvothingsWebViewClient", "mLoadedPage "+mLoadedPage+", "+url);
+				return false;
 			}
 		}
 
@@ -382,7 +414,7 @@ public class MainActivity extends CordovaActivity
 				{
 					evoCacheDelete(mIndex);
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					e.printStackTrace();
 					// Fatal error, let's kill the app.
@@ -406,7 +438,7 @@ public class MainActivity extends CordovaActivity
 				{
 					evoCacheAdd(mUrl);
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					e.printStackTrace();
 					// Fatal error, let's kill the app.
