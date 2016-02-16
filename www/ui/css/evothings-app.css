@@ -20,15 +20,25 @@ html, body {
 	user-select: none;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+
 body {
-	margin: 0 0.9em 0 0.9em;
-	font-size: 150%;
-	font-size: 7.5vw;
+	/* Replaced relative units with pixels. */
+	/*margin: 0 0.9em 0 0.9em;*/
+	margin: 0 20px 0 20px;
+	/*font-size: 150%;
+	font-size: 7.5vw;*/
+	font-size: 28px;
+}
+
+/* Large displays */
+@media (min-width: 600px) {
+	body { font-size: 40px; }
 }
 
 html {
   box-sizing: border-box;
 }
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -770,8 +780,11 @@ input.btn-group.black:checked + label {
 	background-color: #000000;
 }
 
+/*
+This CSS breaks the app when keyboard is shown on Android.
 @media	screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio : 2),
 		screen and (orientation: landscape) and (min--moz-device-pixel-ratio: 2),
 		screen and (orientation: landscape) and (min-device-pixel-ratio : 2) {
 	body { font-size: 4.5vw; }
 }
+*/
