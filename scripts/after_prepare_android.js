@@ -28,12 +28,8 @@ module.exports = function(context)
 	// Example: 'com.evothings.evothingsviewer' --> 'com/evothings/evothingsviewer'
 	var packagePath = appID.replace(/\./g, '/')
 
-	console.log('@@@ packagePath: ' + packagePath)
-
 	// Path to where MainActivity.java is to be written.
 	var fullDestPath = './platforms/android/src/' + packagePath + '/MainActivity.java'
-
-	console.log('@@@ fullDestPath: ' + fullDestPath)
 
 	// Write MainActivity.java to destination.
 	UTIL.writeFileUTF8(fullDestPath, data)
