@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package com.evothings.evothingsviewer;
+package __PACKAGE_NAME__;
 
 import android.content.Intent;
 import android.content.Context;
