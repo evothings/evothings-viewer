@@ -6,11 +6,13 @@ Evothings Viewer is the companion app for [Evothings Studio 2.0](https://github.
 
 The app consists of a Cordova WebView, a number of useful plugins, and a UI to connect to Evothings Studio Workbench. You can edit the list of plugins in file package.json and build your custom version of the Viewer.
 
-Evothings Viewer should not be confused with Evothings Client, which is the companion app for Evothings Studio 1.2. Evothings Viewer is used with the most recent Evothings Studio version (currently 2.0).
+Evothings Viewer should not be confused with Evothings Client, which is the companion app for Evothings Studio. Evothings Viewer is used with the most recent versions of Evothings Studio (version 2.x).
 
 ### Notice when building from source
 
-Branch master may contain updates not yet compatible with current production servers. When building a custom Evothings Viewer app from source, please use [the latest release](https://github.com/evothings/evothings-viewer/releases) (unless you wish to contribute to the development of the VIiewer).
+Branch master may contain updates not yet compatible with current production servers. When building a custom Evothings Viewer app from source, use [the latest release](https://github.com/evothings/evothings-viewer/releases) (unless you wish to contribute to the development of the Viewer).
+
+You can of course also try to build from the master branch, this should work fine in most cases and gives you the latest updates.
 
 ### Building the App
 
@@ -72,11 +74,9 @@ Change the package name in config.xml on this line:
 
     <widget id="com.evothings.evothingsviewer"
 
-For Android, update this line in MainActivity.java to use your package name:
+You can also change the app name, modify this line in confoig.xml:
 
-    package com.evothings.evothingsviewer;
-
-Build for iOS not yet tested with custom package name.
+    <name>Viewer</name>
 
 ### Known Xcode build issues
 
