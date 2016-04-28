@@ -26,10 +26,7 @@
 		{ "id": "cordova-plugin-network-information" },
 		{ "id": "cordova-plugin-statusbar" },
 		{ "id": "cordova-plugin-vibration" },
-		{ "id": "cordova-plugin-chrome-apps-common" },
 		{ "id": "cordova-plugin-chrome-apps-system-network" },
-		{ "id": "cordova-plugin-chrome-apps-iossocketscommon" },
-		{ "id": "cordova-plugin-chrome-apps-socket" },
 		{ "id": "cordova-plugin-chrome-apps-sockets-tcp" },
 		{ "id": "cordova-plugin-chrome-apps-sockets-tcpserver" },
 		{ "id": "cordova-plugin-chrome-apps-sockets-udp" },
@@ -40,13 +37,13 @@
 		  "location": "https://github.com/evothings/cordova-plugin-ibeacon#3.3.2" },
 		{ "id": "cordova-plugin-ble",
 		  "location": "https://github.com/evothings/cordova-ble#1.2.0" },
-		{ "id": "cordova-plugin-estimote",
-		  "location": "https://github.com/evothings/phonegap-estimotebeacons" },
 		{ "id": "com.synconset.cordovaHTTP",
-		  "location": "https://github.com/evothings/cordova-HTTP#v0.2.1" },
+		  "location": "https://github.com/evothings/cordova-HTTP#v0.2.2" },
 		{ "id": "de.appplant.cordova.plugin.local-notification",
 		  "location": "https://github.com/katzer/cordova-plugin-local-notifications#0.8.4" },
 		{ "id": "com.evothings.evothingsviewer.config-plugin",
-		  "location": "config/config-plugin" }
+		  "location": "config/config-plugin" },
+		{ "id": "cordova-plugin-estimote",
+		  "location": "https://github.com/evothings/phonegap-estimotebeacons" }
 	]
 }
