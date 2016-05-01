@@ -6,30 +6,31 @@
 	xmlns="http://www.w3.org/ns/widgets"
 	xmlns:cdv="http://cordova.apache.org/ns/1.0">
 
-    <name>Viewer</name>
-    <description>
-        Mobile app for Evothings Studio.
-    </description>
-    <author email="info@evothings.com" href="http://evothings.com">
-        Evothings AB
-    </author>
-    <content src="index.html" />
-    <access origin="*" />
-    <allow-intent href="*" />
+	<name>Viewer</name>
+	<description>
+		Mobile app for Evothings Studio.
+	</description>
+	<author email="info@evothings.com" href="http://evothings.com">
+		Evothings AB
+	</author>
+	<content src="index.html" />
+	<access origin="*" />
+	<allow-intent href="*" />
 	<allow-navigation href="*" />
 
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="Orientation" value="default" />
-    <preference name="BackgroundColor" value="0xffffffff"/>
+	<preference name="DisallowOverscroll" value="true" />
+	<preference name="Orientation" value="default" />
+	<preference name="BackgroundColor" value="0xffffffff"/>
 	<preference name="HideKeyboardFormAccessoryBar" value="true" />
 	<preference name="FadeSplashScreen" value="false" />
 	<preference name="EnableViewportScale" value="true" />
-	<preference name="AndroidLaunchMode" value="singleTask" />
 	<preference name="BackupWebStorage" value="local" />
-	<preference name="android-minSdkVersion" value="14" />
 
 	<platform name="android">
 		<preference name="Fullscreen" value="false" />
+		<preference name="AndroidLaunchMode" value="singleTask" />
+		<preference name="android-minSdkVersion" value="14" />
+		<preference name="android-targetSdkVersion" value="23" />
 	</platform>
 
 	<platform name="ios">
