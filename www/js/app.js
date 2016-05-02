@@ -37,9 +37,15 @@ app.loadAddOnScript = function()
 	var tryToLoadAgainTimeout = 1500
 
 	// URL for the add-on script.
+	//var url =
+	//	app.getServerAddress() +
+	//	'/server-www/static/evothings-viewer-addon-' +
+	//	app.viewerVersion +
+	//	'.js'
+	
+	// Moved add-on script to new location.
 	var url =
-		app.getServerAddress() +
-		'/server-www/static/evothings-viewer-addon-' +
+		'https://evothings.com/viewer/evothings-viewer-addon-' +
 		app.viewerVersion +
 		'.js'
 
