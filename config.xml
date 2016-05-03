@@ -15,7 +15,6 @@
 	</author>
 	<content src="index.html" />
 	<access origin="*" />
-	<allow-intent href="*" />
 	<allow-navigation href="*" />
 
 	<preference name="DisallowOverscroll" value="true" />
@@ -27,6 +26,7 @@
 	<preference name="BackupWebStorage" value="local" />
 
 	<platform name="android">
+		<allow-intent href="*" />
 		<preference name="Fullscreen" value="false" />
 		<preference name="AndroidLaunchMode" value="singleTask" />
 		<preference name="android-minSdkVersion" value="14" />
