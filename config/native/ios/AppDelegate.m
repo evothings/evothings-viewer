@@ -33,19 +33,32 @@
 	return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
-- (BOOL)application: (UIApplication*)app
+- (BOOL) application: (UIApplication*)application
+		openURL: (NSURL*)url
+		sourceApplication: (NSString*)sourceApplication
+		annotation: (id)annotation
+{
+	NSLog(@"@@@ FOO");
+	return [self evobleOpenURL: url];
+}
+
+- (BOOL) application: (UIApplication*)app
 		openURL: (NSURL*)url
 		options: (NSDictionary<NSString*,id>*)options
 {
+	NSLog(@"@@@ BAR");
+	return [self evobleOpenURL: url];
+}
+
+- (BOOL) evobleOpenURL: (NSURL*)url
+{
 	if (url && [self.viewController.webView isKindOfClass:[UIWebView class]])
 	{
-		NSLog(@"@@@ url scheme: %@", [url scheme]);
+		NSLog(@"@@@ evobleOpenURL url scheme: %@", [url scheme]);
 
 		// Use https for scheme "evos".
 		NSString* httpScheme =
-			[[url scheme] isEqualToString: @"evos"] ?
-				@"https" :
-				@"http";
+			[[url scheme] isEqualToString: @"evos"] ? @"https" : @"http";
 
 		// Load the given URL into the web view.
 		NSString* targetURL =
@@ -59,8 +72,8 @@
 				cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData
 				timeoutInterval: 10];
 
-		NSLog(@"@@@ targetURL: %@", targetURL);
-
+		NSLog(@"@@@ evobleOpenURL targetURL: %@", targetURL);
+		
 		[(UIWebView*)self.viewController.webView loadRequest: request];
 
 		// all plugins will get the notification, and their handlers will be called
