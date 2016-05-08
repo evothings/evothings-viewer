@@ -38,7 +38,6 @@
 		sourceApplication: (NSString*)sourceApplication
 		annotation: (id)annotation
 {
-	NSLog(@"@@@ FOO");
 	return [self evobleOpenURL: url];
 }
 
@@ -46,7 +45,6 @@
 		openURL: (NSURL*)url
 		options: (NSDictionary<NSString*,id>*)options
 {
-	NSLog(@"@@@ BAR");
 	return [self evobleOpenURL: url];
 }
 
@@ -54,7 +52,7 @@
 {
 	if (url && [self.viewController.webView isKindOfClass:[UIWebView class]])
 	{
-		NSLog(@"@@@ evobleOpenURL url scheme: %@", [url scheme]);
+		NSLog(@"@@@ [AppDelegate.m] evobleOpenURL url scheme: %@", [url scheme]);
 
 		// Use https for scheme "evos".
 		NSString* httpScheme =
@@ -72,7 +70,7 @@
 				cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData
 				timeoutInterval: 10];
 
-		NSLog(@"@@@ evobleOpenURL targetURL: %@", targetURL);
+		NSLog(@"@@@ [AppDelegate.m] evobleOpenURL targetURL: %@", targetURL);
 		
 		[(UIWebView*)self.viewController.webView loadRequest: request];
 
