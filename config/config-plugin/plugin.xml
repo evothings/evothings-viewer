@@ -68,14 +68,6 @@
 				<string>UIInterfaceOrientationLandscapeRight</string>
 			</array>
 		</config-file>
-		<config-file target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
-			<array>
-				<string>UIInterfaceOrientationPortrait</string>
-				<string>UIInterfaceOrientationPortraitUpsideDown</string>
-				<string>UIInterfaceOrientationLandscapeLeft</string>
-				<string>UIInterfaceOrientationLandscapeRight</string>
-			</array>
-		</config-file>
 	</platform>
 
 </plugin>
