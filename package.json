@@ -35,7 +35,7 @@
 		{ "id": "cordova-plugin-ble",
 		  "location": "https://github.com/evothings/cordova-ble#1.3.1" },
 		{ "id": "com.unarin.cordova.beacon",
-		  "location": "https://github.com/evothings/cordova-plugin-ibeacon#3.4.2" },
+		  "location": "https://github.com/evothings/cordova-plugin-ibeacon#3.4.3" },
 		{ "id": "com.synconset.cordovaHTTP",
 		  "location": "https://github.com/evothings/cordova-HTTP#v0.2.2" },
 		{ "id": "de.appplant.cordova.plugin.local-notification",
