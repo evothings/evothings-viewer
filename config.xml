@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.evothings.evothingsviewer"
-	version="1.4.2"
-	android-versionCode="8"
-	ios-CFBundleVersion="1.4.2"
+	version="1.5"
+	android-versionCode="9"
+	ios-CFBundleVersion="1.5"
 	xmlns="http://www.w3.org/ns/widgets"
 	xmlns:cdv="http://cordova.apache.org/ns/1.0">
 
