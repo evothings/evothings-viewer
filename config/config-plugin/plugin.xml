@@ -68,6 +68,9 @@
 				<string>UIInterfaceOrientationLandscapeRight</string>
 			</array>
 		</config-file>
+		<config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+			<string>Scan QR Codes and Barcodes</string>
+		</config-file>
 	</platform>
 
 </plugin>

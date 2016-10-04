@@ -40,6 +40,7 @@
 		  "location": "https://github.com/evothings/cordova-HTTP#v0.2.2" },
 		{ "id": "de.appplant.cordova.plugin.local-notification",
 		  "location": "https://github.com/katzer/cordova-plugin-local-notifications#0.8.4" },
+		{ "id": "phonegap-plugin-barcodescanner" },
 		{ "id": "com.evothings.evothingsviewer.config-plugin",
 		  "location": "config/config-plugin" }
 	]
