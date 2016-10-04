@@ -41,8 +41,6 @@
 		{ "id": "de.appplant.cordova.plugin.local-notification",
 		  "location": "https://github.com/katzer/cordova-plugin-local-notifications#0.8.4" },
 		{ "id": "com.evothings.evothingsviewer.config-plugin",
-		  "location": "config/config-plugin" },
-		{ "id": "cordova-plugin-estimote",
-		  "location": "https://github.com/evothings/phonegap-estimotebeacons" }
+		  "location": "config/config-plugin" }
 	]
 }
