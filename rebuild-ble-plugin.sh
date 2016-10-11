@@ -4,6 +4,6 @@
 #
 cordova plugin rm cordova-plugin-ble
 cordova plugin add ../cordova-ble
-cordova build ios
+#cordova build ios
 cordova build android
-adb install -r ./platforms/android/build/outputs/apk/android-debug.apk
+#adb install -r ./platforms/android/build/outputs/apk/android-debug.apk
