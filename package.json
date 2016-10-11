@@ -33,7 +33,7 @@
 		{ "id": "phonegap-nfc" },
 		{ "id": "cordova-plugin-bluetooth-serial" },
 		{ "id": "cordova-plugin-ble",
-		  "location": "https://github.com/evothings/cordova-ble#1.4.2" },
+		  "location": "https://github.com/evothings/cordova-ble#2.0.0" },
 		{ "id": "com.unarin.cordova.beacon",
 		  "location": "https://github.com/evothings/cordova-plugin-ibeacon#3.4.3" },
 		{ "id": "com.synconset.cordovaHTTP",
