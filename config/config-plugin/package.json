@@ -1,0 +1,7 @@
+{
+  "name": "config-plugin",
+  "version": "1.0.0",
+  "description": "Config custom plugin",
+  "author": "Evothings",
+  "license": "MIT"
+}
