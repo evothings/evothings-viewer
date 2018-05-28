@@ -3,3 +3,8 @@ platforms
 plugins
 www/evothings.json
 EvothingsViewer.apk
+node_modules
+.vscode
+jsconfig.json
+.gradle
+typings
