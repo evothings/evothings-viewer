@@ -7,10 +7,10 @@ module.exports = function(context)
 	var UTIL = require('./util.js')
 
 	// Insert version info into target index.html.
-	UTIL.insertVersionInfo(context, './platforms/android/assets/www/index.html')
+	UTIL.insertVersionInfo(context, './platforms/android/app/src/main/assets/www/index.html')
 
 	// Insert version info into target app.js.
-	UTIL.insertVersionInfo(context, './platforms/android/assets/www/js/app.js')
+	UTIL.insertVersionInfo(context, './platforms/android/app/src/main/assets/www/js/app.js')
 
 	// Get application ID.
 	var appID = UTIL.getAppID(context)
@@ -29,7 +29,7 @@ module.exports = function(context)
 	var packagePath = appID.replace(/\./g, '/')
 
 	// Path to where MainActivity.java is to be written.
-	var fullDestPath = './platforms/android/src/' + packagePath + '/MainActivity.java'
+	var fullDestPath = './platforms/android/app/src/main/java/' + packagePath + '/MainActivity.java'
 
 	// Write MainActivity.java to destination.
 	UTIL.writeFileUTF8(fullDestPath, data)
