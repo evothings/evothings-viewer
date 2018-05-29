@@ -8,7 +8,7 @@ The app consists of a Cordova WebView, a number of useful plugins, and a UI to c
 
 ### Notice when building from source
 
-Currently, Cordova version 6.0.0 or higher is needed to build the Viewer.
+Currently, Cordova version 8.0.0 is used to build the Viewer, older may or may not work.
 
 Branch master may contain updates not yet compatible with current production servers. If building from master branch does not work, of if you want to play safe, use [the latest release](https://github.com/evothings/evothings-viewer/releases). Building from master branch should work fine in most cases and gives you the latest updates.
 
@@ -38,6 +38,10 @@ Then build using Cordova:
     cordova build android
     cordova build ios
 
+Or for release:
+
+    cordova build --release android
+
 Plugins will be added automatically first time you add a platform.
 
 You can edit [package.json](package.json) to configure which plugins you wish to be included. New plugins are added on next build.
@@ -45,8 +49,6 @@ You can edit [package.json](package.json) to configure which plugins you wish to
 To clean up the project run (removes folders 'platforms' and 'plugins', you can also delete these folders manually):
 
     node scripts/clean.js
-
-You should run clean.js after having removed plugins from package.json, to get a fresh build.
 
 ### Build system overview
 
