@@ -4,7 +4,7 @@ var packageJson = require('../package.json')
 
 function addPlugins()
 {
-	packageJson.plugins.forEach(function(plugin)
+	packageJson.cordova.plugins.forEach(function(plugin)
 	{
 		if (!pluginExists(plugin))
 		{

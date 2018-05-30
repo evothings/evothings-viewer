@@ -6,5 +6,5 @@ module.exports = function(context)
 
 	var PLUGINS = require('./plugins.js')
 
-	PLUGINS.addPlugins()
+	// PLUGINS.addPlugins()
 }
